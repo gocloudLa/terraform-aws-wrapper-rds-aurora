@@ -305,6 +305,7 @@ important_notes: |
   - **⚠️ Overwrite Database Data:** Allows overwriting data in the database engine - set `force_replace_data = true`
   - **ℹ️ Storage Growth Limit:** Enables unlimited storage growth - set `max_allocated_storage = null`
 input_table: |
+  | `create` | Enables or disables the creation of the resource | `bool` | `true` | no |
   | `name` | Aurora RDS cluster name | `string` | `"${local.common_name}-${each.key}"` | no |
   | `create_db_subnet_group` | Indicates whether to create the subnet group | `bool` | `true` | no |
   | `db_subnet_group_name` | Name of the subnet group for the cluster | `string` | `"${local.common_name}-${each.key}-sg"` | no |
@@ -422,3 +423,4 @@ input_table: |
   | `min_acu` | Minimum capacity of the DB shard group in Aurora Capacity Units (ACU) | `number` | `null` | no |
   | `shard_group_tags` | Additional tags for the shard group | `map` | `{}` | no |
   | `shard_group_timeouts` | Create, update, and delete timeout settings for the shard group | `map` | `{}` | no |
+  | `tags` | Additional tags for the resource | `map` | `{}` | no |
