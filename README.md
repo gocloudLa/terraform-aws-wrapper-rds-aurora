@@ -34,6 +34,10 @@ The Terraform Wrapper for RDS Aurora simplifies the configuration of the Relatio
 
 
 ## 🚀 Quick Start
+### MySQL Example
+<details>
+<summary>MySQL Aurora Cluster</summary>
+
 ```hcl
 rds_aurora_parameters = {
   "mysql-00" = {
@@ -92,7 +96,16 @@ rds_aurora_parameters = {
     # Monitoring & logs
     enabled_cloudwatch_logs_exports = ["error", "slowquery"]
   }
+}
+```
+</details>
 
+### PostgreSQL Example
+<details>
+<summary>PostgreSQL Aurora Cluster</summary>
+
+```hcl
+rds_aurora_parameters = {
   "postgresql-00" = {
     deletion_protection = false
     apply_immediately   = true
@@ -144,6 +157,7 @@ rds_aurora_parameters = {
   }
 }
 ```
+</details>
 
 
 ## 🔧 Additional Features Usage
@@ -346,7 +360,6 @@ dns_records = {
 ## 📑 Inputs
 | Name                                                | Description                                                                                                                                                                                                    | Type     | Default                                                          | Required |
 | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------------------------------------- | -------- |
-| `create`                                            | Enables or disables the creation of the resource                                                                                                                                                               | `bool`   | `true`                                                           | no       |
 | `name`                                              | Aurora RDS cluster name                                                                                                                                                                                        | `string` | `"${local.common_name}-${each.key}"`                             | no       |
 | `create_db_subnet_group`                            | Indicates whether to create the subnet group                                                                                                                                                                   | `bool`   | `true`                                                           | no       |
 | `db_subnet_group_name`                              | Name of the subnet group for the cluster                                                                                                                                                                       | `string` | `"${local.common_name}-${each.key}-sg"`                          | no       |
@@ -408,7 +421,6 @@ dns_records = {
 | `performance_insights_retention_period`             | Retention period for Performance Insights metrics                                                                                                                                                              | `number` | `null`                                                           | no       |
 | `publicly_accessible`                               | Indicate if the instance is publicly accessible                                                                                                                                                                | `bool`   | `false`                                                          | no       |
 | `instance_timeouts`                                 | Timeout settings configuration for instances                                                                                                                                                                   | `map`    | `{}`                                                             | no       |
-| `manage_master_user_password`                       | Indicate if the master user password should be managed                                                                                                                                                         | `bool`   | `false`                                                          | no       |
 | `master_user_secret_kms_key_id`                     | KMS key identifier for master user secret                                                                                                                                                                      | `string` | `null`                                                           | no       |
 | `master_username`                                   | Master user name                                                                                                                                                                                               | `string` | `"root"`                                                         | no       |
 | `master_password`                                   | Master user password                                                                                                                                                                                           | `string` | `"${random_password.this[each.key].result}"`                     | no       |
@@ -464,7 +476,6 @@ dns_records = {
 | `min_acu`                                           | Minimum capacity of the DB shard group in Aurora Capacity Units (ACU)                                                                                                                                          | `number` | `null`                                                           | no       |
 | `shard_group_tags`                                  | Additional tags for the shard group                                                                                                                                                                            | `map`    | `{}`                                                             | no       |
 | `shard_group_timeouts`                              | Create, update, and delete timeout settings for the shard group                                                                                                                                                | `map`    | `{}`                                                             | no       |
-| `tags`                                              | A mapping of tags to assign to all resources                                                                                                                                                                   | `map`    | `{}`                                                             | no       |
 
 
 
