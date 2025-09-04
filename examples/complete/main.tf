@@ -2,7 +2,6 @@ module "wrapper_rds_aurora" {
   source = "../../"
 
   metadata = local.metadata
-  project  = local.project
 
   rds_aurora_parameters = {
     "mysql-01" = {
