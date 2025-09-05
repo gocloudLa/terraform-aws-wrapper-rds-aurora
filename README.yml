@@ -319,120 +319,120 @@ important_notes: |
   - **⚠️ Overwrite Database Data:** Allows overwriting data in the database engine - set `force_replace_data = true`
   - **ℹ️ Storage Growth Limit:** Enables unlimited storage growth - set `max_allocated_storage = null`
 input_table: |
-  | `name` | Aurora RDS cluster name | `string` | `"${local.common_name}-${each.key}"` | no |
-  | `create_db_subnet_group` | Indicates whether to create the subnet group | `bool` | `true` | no |
-  | `db_subnet_group_name` | Name of the subnet group for the cluster | `string` | `"${local.common_name}-${each.key}-sg"` | no |
-  | `subnets` | Subnets associated with the subnet group | `list` | `data.aws_subnets.this[each.key].ids` | no |
-  | `cluster_use_name_prefix` | Indicates whether to use a prefix for the cluster name | `bool` | `false` | no |
-  | `is_primary_cluster` | Defines if the cluster is primary | `bool` | `true` | no |
-  | `allocated_storage` | Amount of allocated storage | `number` | `null` | no |
-  | `allow_major_version_upgrade` | Allows major version upgrades | `bool` | `false` | no |
-  | `apply_immediately` | Apply changes immediately | `bool` | `false` | no |
-  | `availability_zones` | Availability zones associated | `list` | `null` | no |
-  | `backup_retention_period` | Backup retention period | `number` | `null` | no |
-  | `backtrack_window` | Backtrack window | `number` | `null` | no |
-  | `cluster_members` | Cluster members | `list` | `null` | no |
-  | `copy_tags_to_snapshot` | Copy tags to snapshot | `bool` | `null` | no |
-  | `database_name` | Database name | `string` | `null` | no |
-  | `db_cluster_instance_class` | Cluster instance class | `string` | `null` | no |
-  | `db_cluster_db_instance_parameter_group_name` | Name of the cluster parameter group | `string` | `""` | no |
-  | `delete_automated_backups` | Delete automated backups | `bool` | `null` | no |
-  | `deletion_protection` | Protection against deletion | `bool` | `true` | no |
-  | `enable_global_write_forwarding` | Enable global direct write | `bool` | `null` | no |
-  | `enabled_cloudwatch_logs_exports` | Types of logs exported to CloudWatch | `list` | `[]` | no |
-  | `enable_http_endpoint` | Enable HTTP endpoint | `bool` | `null` | no |
-  | `engine` | Database engine | `string` | `null` | no |
-  | `engine_mode` | Database engine mode | `string` | `"provisioned"` | no |
-  | `engine_version` | Engine version | `string` | `null` | no |
-  | `final_snapshot_identifier` | Identifier of the final snapshot | `string` | `null` | no |
-  | `global_cluster_identifier` | Identifier of the global cluster | `string` | `null` | no |
-  | `iam_database_authentication_enabled` | Enable database authentication via IAM | `bool` | `false` | no |
-  | `iops` | Allocated IOPS | `number` | `null` | no |
-  | `kms_key_id` | KMS key identifier | `string` | `null` | no |
-  | `network_type` | Network type (IPV4 or DUAL) | `string` | `null` | no |
-  | `port` | Database port | `number` | `3306` | no |
-  | `preferred_backup_window` | Preferred backup window | `string` | `"02:00-03:00"` | no |
-  | `preferred_maintenance_window` | Preferred maintenance window | `string` | `"sun:05:00-sun:06:00"` | no |
-  | `replication_source_identifier` | Identifier of the replication source | `string` | `null` | no |
-  | `restore_to_point_in_time` | Configuration to restore to a point in time | `map` | `{}` | no |
-  | `scaling_configuration` | Scalability configuration (for serverless mode) | `map` | `{}` | no |
-  | `serverlessv2_scaling_configuration` | Scalability configuration for serverless v2 | `map` | `{}` | no |
-  | `skip_final_snapshot` | Indicates whether to skip the final snapshot | `bool` | `false` | no |
-  | `snapshot_identifier` | Snapshot identifier | `string` | `null` | no |
-  | `source_region` | Source region | `string` | `null` | no |
-  | `storage_encrypted` | Indicates if storage is encrypted | `bool` | `true` | no |
-  | `storage_type` | Storage type | `string` | `"aurora"` | no |
-  | `cluster_tags` | Tags for the cluster | `map` | `local.common_tags` | no |
-  | `vpc_security_group_ids` | Identifiers of the VPC security groups | `list` | `[module.security_group_rds[each.key].security_group_id]` | no |
-  | `cluster_timeouts` | Timeout configuration for the cluster | `map` | `{}` | no |
-  | `enable_local_write_forwarding` | Enable local write forwarding | `bool` | `null` | no |
-  | `cluster_ca_cert_identifier` | Identifier of the cluster CA certificate | `string` | `null` | no |
-  | `engine_lifecycle_support` | Engine lifecycle support | `string` | `null` | no |
-  | `instances` | Configuration of the cluster instances | `map` | `{}` | no |
-  | `endpoints` | Endpoint configuration | `map` | `{}` | no |
-  | `auto_minor_version_upgrade` | Enable automatic minor version upgrade | `bool` | `true` | no |
-  | `ca_cert_identifier` | CA certificate identifier for instances | `string` | `null` | no |
-  | `instances_use_identifier_prefix` | Use prefix in instance identifiers | `bool` | `false` | no |
-  | `instance_class` | Instance class | `string` | `""` | no |
-  | `monitoring_interval` | Monitoring interval in seconds | `number` | `0` | no |
-  | `performance_insights_enabled` | Enable Performance Insights metrics | `bool` | `null` | no |
-  | `performance_insights_kms_key_id` | KMS key identifier for Performance Insights | `string` | `null` | no |
-  | `performance_insights_retention_period` | Retention period for Performance Insights metrics | `number` | `null` | no |
-  | `publicly_accessible` | Indicate if the instance is publicly accessible | `bool` | `false` | no |
-  | `instance_timeouts` | Timeout settings configuration for instances | `map` | `{}` | no |
-  | `master_user_secret_kms_key_id` | KMS key identifier for master user secret | `string` | `null` | no |
-  | `master_username` | Master user name | `string` | `"root"` | no |
-  | `master_password` | Master user password | `string` | `"${random_password.this[each.key].result}"` | no |
-  | `manage_master_user_password_rotation` | Enable automatic rotation of master user password | `bool` | `false` | no |
-  | `master_user_password_rotate_immediately` | Immediate rotation of master user password | `bool` | `null` | no |
-  | `master_user_password_rotation_duration` | Duration of master user password rotation | `number` | `null` | no |
-  | `master_user_password_rotation_schedule_expression` | Schedule expression for password rotation | `string` | `null` | no |
-  | `create_db_cluster_parameter_group` | Create parameter group for the cluster | `bool` | `true` | no |
-  | `db_cluster_parameter_group_name` | Cluster parameter group name | `string` | `"${local.common_name}-${each.key}-cpg"` | no |
-  | `db_cluster_parameter_group_family` | Parameter group family for the cluster | `string` | `null` | no |
-  | `db_cluster_parameter_group_description` | Cluster parameter group description | `string` | `"Cluster parameter group for ${local.common_name}-${each.key}"` | no |
-  | `db_cluster_parameter_group_parameters` | Cluster parameter group parameters | `list` | `[]` | no |
-  | `create_db_parameter_group` | Create database parameter group | `bool` | `true` | no |
-  | `db_parameter_group_name` | Database parameter group name | `string` | `"${local.common_name}-${each.key}-pg"` | no |
-  | `db_parameter_group_family` | Parameter group family for the database | `string` | `null` | no |
-  | `db_parameter_group_description` | Database parameter group description | `string` | `"Parameter group for ${local.common_name}-${each.key}"` | no |
-  | `db_parameter_group_parameters` | Database parameter group parameters | `list` | `[]` | no |
-  | `create_security_group` | Create a Security Group for the cluster | `bool` | `false` | no |
-  | `security_group_name` | Security Group name | `string` | `"${local.common_name}-rds-${each.key}"` | no |
-  | `security_group_use_name_prefix` | Use prefix for Security Group name | `bool` | `false` | no |
-  | `security_group_description` | Security Group description | `string` | `"Security Group for ${local.common_name}-${each.key}"` | no |
-  | `vpc_id` | VPC ID where the Security Group will be created | `string` | `data.aws_vpc.this[each.key].id` | no |
-  | `security_group_rules` | Security Group rules | `map` | `{}` | no |
-  | `create_cloudwatch_log_group` | Create a CloudWatch Log Group for the cluster | `bool` | `true` | no |
-  | `cloudwatch_log_group_retention_in_days` | Log retention in days | `number` | `7` | no |
-  | `cloudwatch_log_group_kms_key_id` | KMS key ID for encrypting logs | `string` | `null` | no |
-  | `cloudwatch_log_group_skip_destroy` | Skip log group destruction when deleting resources | `bool` | `null` | no |
-  | `cloudwatch_log_group_class` | Log group class | `string` | `null` | no |
-  | `create_db_cluster_activity_stream` | Create an Activity Stream for the cluster | `bool` | `false` | no |
-  | `db_cluster_activity_stream_kms_key_id` | KMS key ID for the Activity Stream | `string` | `""` | no |
-  | `db_cluster_activity_stream_mode` | Cluster Activity Stream mode (async/sync) | `string` | `"async"` | no |
-  | `create_monitoring_role` | Create a monitoring role for Enhanced Monitoring | `bool` | `true` | no |
-  | `monitoring_role_arn` | Monitoring role ARN for Enhanced Monitoring | `string` | `"${local.common_name}-rds-monitoring-${each.key}"` | no |
-  | `iam_role_name` | IAM role name | `string` | `"${local.common_name}-${each.key}-role"` | no |
-  | `iam_role_use_name_prefix` | Use prefix for IAM role name | `bool` | `false` | no |
-  | `iam_role_description` | IAM role description | `string` | `null` | no |
-  | `iam_role_path` | IAM role path | `string` | `null` | no |
-  | `iam_role_managed_policy_arns` | Managed policy ARNs for the IAM role | `list` | `null` | no |
-  | `iam_role_permissions_boundary` | Permission limit for the IAM role | `string` | `null` | no |
-  | `iam_role_force_detach_policies` | Force disconnection of policies when deleting the IAM role | `bool` | `null` | no |
-  | `iam_role_max_session_duration` | Maximum duration of the IAM role session in seconds | `number` | `null` | no |
-  | `cluster_performance_insights_enabled` | Enable Performance Insights for the cluster | `bool` | `null` | no |
-  | `cluster_performance_insights_kms_key_id` | KMS key ID to encrypt Performance Insights data | `string` | `null` | no |
-  | `cluster_performance_insights_retention_period` | Retention period for Performance Insights data | `number` | `null` | no |
-  | `cluster_monitoring_interval` | Interval, in seconds, between points at which Enhanced Monitoring metrics are collected for the DB cluster | `number` | `0` | no |
-  | `cloudwatch_log_group_tags` | Additional tags for the Cloudwatch log group(s) | `map` | `{}` | no |
-  | `cluster_scalability_type` | Scalability mode of the database cluster. When set to unlimited, the cluster operates as an Aurora database without limits. When set to standard (default), the cluster uses normal database instance creation | `string` | `null` | no |
-  | `database_insights_mode` | Mode in which Database Insights will be enabled for the database cluster | `string` | `null` | no |
-  | `create_shard_group` | Create a shard group | `bool` | `false` | no |
-  | `compute_redundancy` | Specifies whether to create standby database shard groups | `number` | `null` | no |
-  | `db_shard_group_identifier` | Name of the DB shard group | `string` | `null` | no |
-  | `max_acu` | Maximum capacity of the DB shard group in Aurora Capacity Units (ACU) | `number` | `null` | no |
-  | `min_acu` | Minimum capacity of the DB shard group in Aurora Capacity Units (ACU) | `number` | `null` | no |
-  | `shard_group_tags` | Additional tags for the shard group | `map` | `{}` | no |
-  | `shard_group_timeouts` | Create, update, and delete timeout settings for the shard group | `map` | `{}` | no |
+  | name | Aurora RDS cluster name | `string` | `"${local.common_name}-${each.key}"` | no |
+  | create_db_subnet_group | Indicates whether to create the subnet group | `bool` | `true` | no |
+  | db_subnet_group_name | Name of the subnet group for the cluster | `string` | `"${local.common_name}-${each.key}-sg"` | no |
+  | subnets | Subnets associated with the subnet group | `list` | `data.aws_subnets.this[each.key].ids` | no |
+  | cluster_use_name_prefix | Indicates whether to use a prefix for the cluster name | `bool` | `false` | no |
+  | is_primary_cluster | Defines if the cluster is primary | `bool` | `true` | no |
+  | allocated_storage | Amount of allocated storage | `number` | `null` | no |
+  | allow_major_version_upgrade | Allows major version upgrades | `bool` | `false` | no |
+  | apply_immediately | Apply changes immediately | `bool` | `false` | no |
+  | availability_zones | Availability zones associated | `list` | `null` | no |
+  | backup_retention_period | Backup retention period | `number` | `null` | no |
+  | backtrack_window | Backtrack window | `number` | `null` | no |
+  | cluster_members | Cluster members | `list` | `null` | no |
+  | copy_tags_to_snapshot | Copy tags to snapshot | `bool` | `null` | no |
+  | database_name | Database name | `string` | `null` | no |
+  | db_cluster_instance_class | Cluster instance class | `string` | `null` | no |
+  | db_cluster_db_instance_parameter_group_name | Name of the cluster parameter group | `string` | `""` | no |
+  | delete_automated_backups | Delete automated backups | `bool` | `null` | no |
+  | deletion_protection | Protection against deletion | `bool` | `true` | no |
+  | enable_global_write_forwarding | Enable global direct write | `bool` | `null` | no |
+  | enabled_cloudwatch_logs_exports | Types of logs exported to CloudWatch | `list` | `[]` | no |
+  | enable_http_endpoint | Enable HTTP endpoint | `bool` | `null` | no |
+  | engine | Database engine | `string` | `null` | no |
+  | engine_mode | Database engine mode | `string` | `"provisioned"` | no |
+  | engine_version | Engine version | `string` | `null` | no |
+  | final_snapshot_identifier | Identifier of the final snapshot | `string` | `null` | no |
+  | global_cluster_identifier | Identifier of the global cluster | `string` | `null` | no |
+  | iam_database_authentication_enabled | Enable database authentication via IAM | `bool` | `false` | no |
+  | iops | Allocated IOPS | `number` | `null` | no |
+  | kms_key_id | KMS key identifier | `string` | `null` | no |
+  | network_type | Network type (IPV4 or DUAL) | `string` | `null` | no |
+  | port | Database port | `number` | `3306` | no |
+  | preferred_backup_window | Preferred backup window | `string` | `"02:00-03:00"` | no |
+  | preferred_maintenance_window | Preferred maintenance window | `string` | `"sun:05:00-sun:06:00"` | no |
+  | replication_source_identifier | Identifier of the replication source | `string` | `null` | no |
+  | restore_to_point_in_time | Configuration to restore to a point in time | `map` | `{}` | no |
+  | scaling_configuration | Scalability configuration (for serverless mode) | `map` | `{}` | no |
+  | serverlessv2_scaling_configuration | Scalability configuration for serverless v2 | `map` | `{}` | no |
+  | skip_final_snapshot | Indicates whether to skip the final snapshot | `bool` | `false` | no |
+  | snapshot_identifier | Snapshot identifier | `string` | `null` | no |
+  | source_region | Source region | `string` | `null` | no |
+  | storage_encrypted | Indicates if storage is encrypted | `bool` | `true` | no |
+  | storage_type | Storage type | `string` | `"aurora"` | no |
+  | cluster_tags | Tags for the cluster | `map` | `local.common_tags` | no |
+  | vpc_security_group_ids | Identifiers of the VPC security groups | `list` | `[module.security_group_rds[each.key].security_group_id]` | no |
+  | cluster_timeouts | Timeout configuration for the cluster | `map` | `{}` | no |
+  | enable_local_write_forwarding | Enable local write forwarding | `bool` | `null` | no |
+  | cluster_ca_cert_identifier | Identifier of the cluster CA certificate | `string` | `null` | no |
+  | engine_lifecycle_support | Engine lifecycle support | `string` | `null` | no |
+  | instances | Configuration of the cluster instances | `map` | `{}` | no |
+  | endpoints | Endpoint configuration | `map` | `{}` | no |
+  | auto_minor_version_upgrade | Enable automatic minor version upgrade | `bool` | `true` | no |
+  | ca_cert_identifier | CA certificate identifier for instances | `string` | `null` | no |
+  | instances_use_identifier_prefix | Use prefix in instance identifiers | `bool` | `false` | no |
+  | instance_class | Instance class | `string` | `""` | no |
+  | monitoring_interval | Monitoring interval in seconds | `number` | `0` | no |
+  | performance_insights_enabled | Enable Performance Insights metrics | `bool` | `null` | no |
+  | performance_insights_kms_key_id | KMS key identifier for Performance Insights | `string` | `null` | no |
+  | performance_insights_retention_period | Retention period for Performance Insights metrics | `number` | `null` | no |
+  | publicly_accessible | Indicate if the instance is publicly accessible | `bool` | `false` | no |
+  | instance_timeouts | Timeout settings configuration for instances | `map` | `{}` | no |
+  | master_user_secret_kms_key_id | KMS key identifier for master user secret | `string` | `null` | no |
+  | master_username | Master user name | `string` | `"root"` | no |
+  | master_password | Master user password | `string` | `"${random_password.this[each.key].result}"` | no |
+  | manage_master_user_password_rotation | Enable automatic rotation of master user password | `bool` | `false` | no |
+  | master_user_password_rotate_immediately | Immediate rotation of master user password | `bool` | `null` | no |
+  | master_user_password_rotation_duration | Duration of master user password rotation | `number` | `null` | no |
+  | master_user_password_rotation_schedule_expression | Schedule expression for password rotation | `string` | `null` | no |
+  | create_db_cluster_parameter_group | Create parameter group for the cluster | `bool` | `true` | no |
+  | db_cluster_parameter_group_name | Cluster parameter group name | `string` | `"${local.common_name}-${each.key}-cpg"` | no |
+  | db_cluster_parameter_group_family | Parameter group family for the cluster | `string` | `null` | no |
+  | db_cluster_parameter_group_description | Cluster parameter group description | `string` | `"Cluster parameter group for ${local.common_name}-${each.key}"` | no |
+  | db_cluster_parameter_group_parameters | Cluster parameter group parameters | `list` | `[]` | no |
+  | create_db_parameter_group | Create database parameter group | `bool` | `true` | no |
+  | db_parameter_group_name | Database parameter group name | `string` | `"${local.common_name}-${each.key}-pg"` | no |
+  | db_parameter_group_family | Parameter group family for the database | `string` | `null` | no |
+  | db_parameter_group_description | Database parameter group description | `string` | `"Parameter group for ${local.common_name}-${each.key}"` | no |
+  | db_parameter_group_parameters | Database parameter group parameters | `list` | `[]` | no |
+  | create_security_group | Create a Security Group for the cluster | `bool` | `false` | no |
+  | security_group_name | Security Group name | `string` | `"${local.common_name}-rds-${each.key}"` | no |
+  | security_group_use_name_prefix | Use prefix for Security Group name | `bool` | `false` | no |
+  | security_group_description | Security Group description | `string` | `"Security Group for ${local.common_name}-${each.key}"` | no |
+  | vpc_id | VPC ID where the Security Group will be created | `string` | `data.aws_vpc.this[each.key].id` | no |
+  | security_group_rules | Security Group rules | `map` | `{}` | no |
+  | create_cloudwatch_log_group | Create a CloudWatch Log Group for the cluster | `bool` | `true` | no |
+  | cloudwatch_log_group_retention_in_days | Log retention in days | `number` | `7` | no |
+  | cloudwatch_log_group_kms_key_id | KMS key ID for encrypting logs | `string` | `null` | no |
+  | cloudwatch_log_group_skip_destroy | Skip log group destruction when deleting resources | `bool` | `null` | no |
+  | cloudwatch_log_group_class | Log group class | `string` | `null` | no |
+  | create_db_cluster_activity_stream | Create an Activity Stream for the cluster | `bool` | `false` | no |
+  | db_cluster_activity_stream_kms_key_id | KMS key ID for the Activity Stream | `string` | `""` | no |
+  | db_cluster_activity_stream_mode | Cluster Activity Stream mode (async/sync) | `string` | `"async"` | no |
+  | create_monitoring_role | Create a monitoring role for Enhanced Monitoring | `bool` | `true` | no |
+  | monitoring_role_arn | Monitoring role ARN for Enhanced Monitoring | `string` | `"${local.common_name}-rds-monitoring-${each.key}"` | no |
+  | iam_role_name | IAM role name | `string` | `"${local.common_name}-${each.key}-role"` | no |
+  | iam_role_use_name_prefix | Use prefix for IAM role name | `bool` | `false` | no |
+  | iam_role_description | IAM role description | `string` | `null` | no |
+  | iam_role_path | IAM role path | `string` | `null` | no |
+  | iam_role_managed_policy_arns | Managed policy ARNs for the IAM role | `list` | `null` | no |
+  | iam_role_permissions_boundary | Permission limit for the IAM role | `string` | `null` | no |
+  | iam_role_force_detach_policies | Force disconnection of policies when deleting the IAM role | `bool` | `null` | no |
+  | iam_role_max_session_duration | Maximum duration of the IAM role session in seconds | `number` | `null` | no |
+  | cluster_performance_insights_enabled | Enable Performance Insights for the cluster | `bool` | `null` | no |
+  | cluster_performance_insights_kms_key_id | KMS key ID to encrypt Performance Insights data | `string` | `null` | no |
+  | cluster_performance_insights_retention_period | Retention period for Performance Insights data | `number` | `null` | no |
+  | cluster_monitoring_interval | Interval, in seconds, between points at which Enhanced Monitoring metrics are collected for the DB cluster | `number` | `0` | no |
+  | cloudwatch_log_group_tags | Additional tags for the Cloudwatch log group(s) | `map` | `{}` | no |
+  | cluster_scalability_type | Scalability mode of the database cluster. When set to unlimited, the cluster operates as an Aurora database without limits. When set to standard (default), the cluster uses normal database instance creation | `string` | `null` | no |
+  | database_insights_mode | Mode in which Database Insights will be enabled for the database cluster | `string` | `null` | no |
+  | create_shard_group | Create a shard group | `bool` | `false` | no |
+  | compute_redundancy | Specifies whether to create standby database shard groups | `number` | `null` | no |
+  | db_shard_group_identifier | Name of the DB shard group | `string` | `null` | no |
+  | max_acu | Maximum capacity of the DB shard group in Aurora Capacity Units (ACU) | `number` | `null` | no |
+  | min_acu | Minimum capacity of the DB shard group in Aurora Capacity Units (ACU) | `number` | `null` | no |
+  | shard_group_tags | Additional tags for the shard group | `map` | `{}` | no |
+  | shard_group_timeouts | Create, update, and delete timeout settings for the shard group | `map` | `{}` | no |
   | tags | A map of tags to assign to resources. | `map` | `{}` | no |
