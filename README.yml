@@ -435,3 +435,4 @@ input_table: |
   | `min_acu` | Minimum capacity of the DB shard group in Aurora Capacity Units (ACU) | `number` | `null` | no |
   | `shard_group_tags` | Additional tags for the shard group | `map` | `{}` | no |
   | `shard_group_timeouts` | Create, update, and delete timeout settings for the shard group | `map` | `{}` | no |
+  | tags | A map of tags to assign to resources. | `map` | `{}` | no |

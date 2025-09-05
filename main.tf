@@ -171,5 +171,5 @@ module "rds_aurora" {
   shard_group_tags          = try(each.value.shard_group_tags, var.rds_aurora_defaults.shard_group_tags, {})
   shard_group_timeouts      = try(each.value.shard_group_timeouts, var.rds_aurora_defaults.shard_group_timeouts, {})
 
-  tags = local.common_tags
+  tags = merge(local.common_tags, try(each.value.tags, var.rds_aurora_defaults.tags, null))
 }
