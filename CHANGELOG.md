@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.0.0...v1.0.1) (2025-10-11)
+
+
+### Bug Fixes
+
+* **versions:** remove unused random ([#3](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/issues/3)) ([b64c45f](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/commit/b64c45fdb75c8e7b5a75b025d2a0bc64c525c929))
+
 ## 1.0.0 (2025-09-05)
 
 
