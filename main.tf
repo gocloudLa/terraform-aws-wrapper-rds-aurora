@@ -57,7 +57,7 @@ module "rds_aurora" {
   storage_encrypted                           = try(each.value.storage_encrypted, var.rds_aurora_defaults.storage_encrypted, true) // necesita kms id
   storage_type                                = try(each.value.storage_type, var.rds_aurora_defaults.storage_type, "aurora")
   cluster_tags                                = local.common_tags
-  vpc_security_group_ids                      = try(each.value.vpc_security_group_ids, var.rds_aurora_defaults.vpc_security_group_ids, [module.security_group_rds[each.key].security_group_id])
+  vpc_security_group_ids                      = try(each.value.vpc_security_group_ids, var.rds_aurora_defaults.vpc_security_group_ids, concat([module.security_group_rds[each.key].security_group_id], try(each.value.vpc_security_group_ids, [])))
   cluster_timeouts                            = try(each.value.cluster_timeouts, var.rds_aurora_defaults.cluster_timeouts, {})
   enable_local_write_forwarding               = try(each.value.enable_local_write_forwarding, var.rds_aurora_defaults.enable_local_write_forwarding, null)
   cluster_ca_cert_identifier                  = try(each.value.cluster_ca_cert_identifier, var.rds_aurora_defaults.cluster_ca_cert_identifier, null)
