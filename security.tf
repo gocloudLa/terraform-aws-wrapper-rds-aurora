@@ -4,6 +4,7 @@ module "security_group_rds" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.3.0"
 
+  create          = lookup(each.value, "security_group_create", true)
   name            = lookup(each.value, "security_group_name", "${local.common_name}-rds-${each.key}")
   description     = lookup(each.value, "security_group_description", "Security Group managed by Terraform")
   vpc_id          = data.aws_vpc.this[each.key].id
