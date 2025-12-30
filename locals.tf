@@ -1,5 +1,5 @@
 locals {
-  rds_vpc_security_group_ids = { 
+  rds_vpc_security_group_ids = {
     for key, value in var.rds_aurora_parameters :
     key => concat(
       (

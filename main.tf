@@ -99,7 +99,7 @@ module "rds_aurora" {
   /*---------------------------*/
   create_db_cluster_parameter_group          = try(each.value.create_db_cluster_parameter_group, var.rds_aurora_defaults.create_db_cluster_parameter_group, true)
   db_cluster_parameter_group_name            = try(each.value.db_cluster_parameter_group_name, var.rds_aurora_defaults.db_cluster_parameter_group_name, "${local.common_name}-${each.key}-cpg")
-  db_cluster_parameter_group_use_name_prefix = try(each.value.db_cluster_parameter_group_use_use_name_prefix , var.rds_aurora_defaults.db_cluster_parameter_group_use_use_name_prefix , false)
+  db_cluster_parameter_group_use_name_prefix = try(each.value.db_cluster_parameter_group_use_use_name_prefix, var.rds_aurora_defaults.db_cluster_parameter_group_use_use_name_prefix, false)
   db_cluster_parameter_group_family          = try(each.value.parameter_group_family, each.value.db_cluster_parameter_group_family, var.rds_aurora_defaults.db_cluster_parameter_group_family, null)
   db_cluster_parameter_group_description     = try(each.value.db_cluster_parameter_group_description, var.rds_aurora_defaults.db_cluster_parameter_group_description, "Cluster parameter group for ${local.common_name}-${each.key}")
   db_cluster_parameter_group_parameters      = try(each.value.db_cluster_parameter_group_parameters, var.rds_aurora_defaults.db_cluster_parameter_group_parameters, [])
@@ -107,12 +107,12 @@ module "rds_aurora" {
   /*---------------------------*/
   /* Parameter Group           */
   /*---------------------------*/
-  create_db_parameter_group          = try(each.value.create_db_parameter_group, var.rds_aurora_defaults.create_db_parameter_group, true)
-  db_parameter_group_name            = try(each.value.db_parameter_group_name, var.rds_aurora_defaults.db_parameter_group_name, "${local.common_name}-${each.key}-pg")
-  db_parameter_group_family          = try(each.value.parameter_group_family, each.value.db_parameter_group_family, var.rds_aurora_defaults.db_parameter_group_family, null)
-  db_parameter_group_description     = try(each.value.db_parameter_group_description, var.rds_aurora_defaults.db_parameter_group_description, "Parameter group for ${local.common_name}-${each.key}")
-  db_parameter_group_parameters      = try(each.value.db_parameter_group_parameters, var.rds_aurora_defaults.db_parameter_group_parameters, [])
-  
+  create_db_parameter_group      = try(each.value.create_db_parameter_group, var.rds_aurora_defaults.create_db_parameter_group, true)
+  db_parameter_group_name        = try(each.value.db_parameter_group_name, var.rds_aurora_defaults.db_parameter_group_name, "${local.common_name}-${each.key}-pg")
+  db_parameter_group_family      = try(each.value.parameter_group_family, each.value.db_parameter_group_family, var.rds_aurora_defaults.db_parameter_group_family, null)
+  db_parameter_group_description = try(each.value.db_parameter_group_description, var.rds_aurora_defaults.db_parameter_group_description, "Parameter group for ${local.common_name}-${each.key}")
+  db_parameter_group_parameters  = try(each.value.db_parameter_group_parameters, var.rds_aurora_defaults.db_parameter_group_parameters, [])
+
 
   /*---------------------------*/
   /* Security Group            */

@@ -20,8 +20,8 @@ module "security_group_rds" {
     }
     ]
   )
-  egress_with_cidr_blocks = lookup(each.value, "egress_with_cidr_blocks", [])
-  egress_with_ipv6_cidr_blocks  = lookup(each.value, "egress_with_ipv6_cidr_blocks", [])
+  egress_with_cidr_blocks      = lookup(each.value, "egress_with_cidr_blocks", [])
+  egress_with_ipv6_cidr_blocks = lookup(each.value, "egress_with_ipv6_cidr_blocks", [])
 
   tags = local.common_tags
 }
