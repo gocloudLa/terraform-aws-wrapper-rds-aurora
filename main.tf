@@ -113,7 +113,6 @@ module "rds_aurora" {
   db_parameter_group_description = try(each.value.db_parameter_group_description, var.rds_aurora_defaults.db_parameter_group_description, "Parameter group for ${local.common_name}-${each.key}")
   db_parameter_group_parameters  = try(each.value.db_parameter_group_parameters, var.rds_aurora_defaults.db_parameter_group_parameters, [])
 
-
   /*---------------------------*/
   /* Security Group            */
   /*---------------------------*/
