@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.0.1...v1.1.0) (2026-01-07)
+
+
+### Features
+
+* **module:** add custom values & security group rules ([#5](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/issues/5)) ([6df8f62](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/commit/6df8f62c4cdbdf1fecab2e40eb6d916e307f30fd))
+
 ## [1.0.1](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.0.0...v1.0.1) (2025-10-11)
 
 
