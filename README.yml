@@ -363,7 +363,7 @@ input_table: |
   | storage_encrypted | Indicates if storage is encrypted | `bool` | `true` | no |
   | storage_type | Storage type | `string` | `"aurora"` | no |
   | cluster_tags | Tags for the cluster | `map` | `local.common_tags` | no |
-  | vpc_security_group_ids | Identifiers of the VPC security groups | `list` | `[module.security_group_rds[each.key].security_group_id]` | no |
+  | vpc_security_group_ids | Identifiers of the VPC security groups | `list` | `local.rds_vpc_security_group_ids[each.key]` | no |
   | cluster_timeouts | Timeout configuration for the cluster | `map` | `{}` | no |
   | enable_local_write_forwarding | Enable local write forwarding | `bool` | `null` | no |
   | cluster_ca_cert_identifier | Identifier of the cluster CA certificate | `string` | `null` | no |
@@ -389,6 +389,7 @@ input_table: |
   | master_user_password_rotation_schedule_expression | Schedule expression for password rotation | `string` | `null` | no |
   | create_db_cluster_parameter_group | Create parameter group for the cluster | `bool` | `true` | no |
   | db_cluster_parameter_group_name | Cluster parameter group name | `string` | `"${local.common_name}-${each.key}-cpg"` | no |
+  | db_cluster_parameter_group_use_name_prefix | Cluster parameter group for use name prefix | `bool` | `true` | no |
   | db_cluster_parameter_group_family | Parameter group family for the cluster | `string` | `null` | no |
   | db_cluster_parameter_group_description | Cluster parameter group description | `string` | `"Cluster parameter group for ${local.common_name}-${each.key}"` | no |
   | db_cluster_parameter_group_parameters | Cluster parameter group parameters | `list` | `[]` | no |
