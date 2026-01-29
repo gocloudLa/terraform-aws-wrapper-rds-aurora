@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.1.0...v1.2.0) (2026-01-29)
+
+
+### Features
+
+* **security:** add cluster_tags & custom tags to security group ([#7](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/issues/7)) ([798a9e1](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/commit/798a9e1b01b25e86bfe46bb204bf969c35c95f86))
+
 ## [1.1.0](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.0.1...v1.1.0) (2026-01-07)
 
 
