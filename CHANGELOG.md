@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.2.0...v1.2.1) (2026-02-12)
+
+
+### Bug Fixes
+
+* **lambda-postgres:** add permission to new user for schemas ([#9](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/issues/9)) ([99ab04c](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/commit/99ab04c64d6f53328d3a70e8146373fbec1a9dfa))
+
 ## [1.2.0](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.1.0...v1.2.0) (2026-01-29)
 
 
