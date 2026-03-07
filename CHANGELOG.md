@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.2.1...v1.2.2) (2026-03-07)
+
+
+### Bug Fixes
+
+* **update:** rds-aurora -&gt; v10.2.0 / lambda-&gt;v8.7.0 / s3-&gt;v5.10.0 / event-bridge-&gt; v4.3.0 ([#11](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/issues/11)) ([9ca496a](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/commit/9ca496a48289bc1db903ec8df620c36494c9b2fa))
+
 ## [1.2.1](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.2.0...v1.2.1) (2026-02-12)
 
 
