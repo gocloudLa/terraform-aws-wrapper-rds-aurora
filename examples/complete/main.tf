@@ -12,14 +12,12 @@ module "wrapper_rds_aurora" {
       # subnets  = data.aws_subnets.public.ids # Default: ""
       # subnet_name = "${local.common_name_prefix}-public*" # Default: "${local.common_name_prefix}-private*"
 
-      engine                 = "aurora-mysql"
-      engine_version         = "8.0"
-      parameter_group_family = "aurora-mysql8.0"
+      engine         = "aurora-mysql"
+      engine_version = "8.0"
 
       # Instances
       instances = {
         1 = {
-          # identifier     = "master-member-1" # Optional custom instance name
           instance_class = "db.t3.medium"
         }
       }
@@ -201,11 +199,9 @@ module "wrapper_rds_aurora" {
       apply_immediately   = true
       skip_final_snapshot = true
 
-      engine                 = "aurora-postgresql"
-      engine_version         = "16.2"
-      parameter_group_family = "aurora-postgresql16"
-
-      port = "5432"
+      engine         = "aurora-postgresql"
+      engine_version = "16"
+      port           = "5432"
 
       # Instances
       instances = {
@@ -213,14 +209,10 @@ module "wrapper_rds_aurora" {
           instance_class = "db.t3.medium"
         }
       }
-      # publicly_accessible = true # Default = false
-      # subnets             = data.aws_subnets.public.ids
       dns_records = {
         "" = {
           zone_name    = local.zone_private
           private_zone = true
-          # zone_name    = local.zone_public # Create Public DNS Record
-          # private_zone = false
         }
       }
 
@@ -306,17 +298,15 @@ module "wrapper_rds_aurora" {
       apply_immediately   = true
       skip_final_snapshot = true
 
-      engine                 = "aurora-mysql"
-      engine_version         = "8.0"
-      parameter_group_family = "aurora-mysql8.0"
+      engine         = "aurora-mysql"
+      engine_version = "8.0"
+      subnets        = data.aws_subnets.public.ids
 
-      publicly_accessible = true # Default = false
-      subnets             = data.aws_subnets.public.ids
-
-      # Instances
+      # Instances (publicly_accessible va por instancia en v10)
       instances = {
         1 = {
-          instance_class = "db.t3.medium"
+          instance_class      = "db.t3.medium"
+          publicly_accessible = true
         }
       }
 

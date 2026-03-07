@@ -1,6 +1,6 @@
 module "lambda_create_dump" {
   source  = "terraform-aws-modules/lambda/aws"
-  version = "8.0.1"
+  version = "8.7.0"
 
   count = local.condition_create ? 1 : 0
 
@@ -8,6 +8,9 @@ module "lambda_create_dump" {
   description   = var.description
   handler       = "index.lambda_handler"
   runtime       = "python3.13"
+
+  ignore_source_code_hash      = true
+  trigger_on_package_timestamp = false
 
   memory_size = var.memory_size
   timeout     = var.timeout
@@ -69,7 +72,7 @@ resource "aws_lambda_layer_version" "this" {
 
 module "s3_create_dump" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "5.2.0"
+  version = "5.10.0"
 
   count = local.condition_create ? 1 : 0
 
@@ -119,6 +122,7 @@ module "s3_create_dump" {
 module "s3_dump_objects" {
   source  = "terraform-aws-modules/s3-bucket/aws//modules/object"
   version = "5.2.0"
+  # version = "5.10.0"
 
   for_each    = local.condition_create_s3_dump_objects ? fileset(var.local_path_custom_scripts, "**") : []
   bucket      = module.s3_create_dump[0].s3_bucket_id
@@ -129,12 +133,15 @@ module "s3_dump_objects" {
 
 module "eventbridge_create_dump" {
   source  = "terraform-aws-modules/eventbridge/aws"
-  version = "4.1.0"
+  version = "4.3.0"
 
   count = local.condition_create ? 1 : 0
 
   role_name  = "${var.name}_event"
   create_bus = false
+
+  create_log_delivery_source = false
+  create_log_delivery        = false
 
   rules = {
     "${var.name}" = {
