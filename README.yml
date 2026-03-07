@@ -291,9 +291,15 @@ features:
       - title: Configuration Code
         code: |
           ```hcl
-          enable_db_dump_restore = true
-          db_dump_restore_s3_bucket_name = "demo-l04-core-00-db-dump-create"
-          db_dump_restore_db_name = "demo"
+          rds_aurora_parameters = {
+            "00" = {
+              ...
+              enable_db_dump_restore         = true
+              db_dump_restore_s3_bucket_name = "demo-l04-core-00-db-dump-create"
+              db_dump_restore_db_name        = "demo"
+              ...
+            }
+          }
           ```
   - icon: 🌐
     title: DNS Record
@@ -314,6 +320,7 @@ features:
           }
           ```
 important_notes: |
+  - **🔒 Security Group:** The wrapper always manages the Security Group (see `security.tf`). The RDS module never creates one; we pass the wrapper's SG ID (and any extra `vpc_security_group_ids`) to the cluster.
   - **🚨 Restart Engine During Changes:** Restart the engine during parameter group changes - set `apply_immediately = true`
   - **⚠️ Public Access:** Exposes the resource to the internet - set `publicly_accessible = true`
   - **⚠️ Overwrite Database Data:** Allows overwriting data in the database engine - set `force_replace_data = true`
@@ -398,12 +405,34 @@ input_table: |
   | db_parameter_group_family | Parameter group family for the database | `string` | `null` | no |
   | db_parameter_group_description | Database parameter group description | `string` | `"Parameter group for ${local.common_name}-${each.key}"` | no |
   | db_parameter_group_parameters | Database parameter group parameters | `list` | `[]` | no |
-  | create_security_group | Create a Security Group for the cluster | `bool` | `false` | no |
+  | security_group_create | Create the Security Group (wrapper; RDS module never creates its own) | `bool` | `true` | no |
   | security_group_name | Security Group name | `string` | `"${local.common_name}-rds-${each.key}"` | no |
-  | security_group_use_name_prefix | Use prefix for Security Group name | `bool` | `false` | no |
-  | security_group_description | Security Group description | `string` | `"Security Group for ${local.common_name}-${each.key}"` | no |
-  | vpc_id | VPC ID where the Security Group will be created | `string` | `data.aws_vpc.this[each.key].id` | no |
-  | security_group_rules | Security Group rules | `map` | `{}` | no |
+  | security_group_description | Security Group description | `string` | `"Security Group managed by Terraform"` | no |
+  | ingress_with_cidr_blocks | Ingress rules with CIDR blocks | `list` | MySQL + PostgreSQL from VPC CIDR | no |
+  | egress_with_cidr_blocks | Egress rules with CIDR blocks | `list` | `[]` | no |
+  | egress_with_ipv6_cidr_blocks | Egress rules with IPv6 CIDR blocks | `list` | `[]` | no |
+  | vpc_security_group_ids | Additional existing Security Group IDs to attach to the cluster | `list` | `[]` | no |
+  | parameter_group_family | Parameter group family (e.g. aurora-mysql8.0) | `string` | Derived from engine + engine_version | no |
+  | dns_records | DNS records (Route53) for the cluster endpoint | `map` | `null` | no |
+  | enable_db_management | Enable DB user/database management Lambda | `bool` | `false` | no |
+  | enable_db_management_logs_notifications | Enable notifications for DB management logs | `bool` | `false` | no |
+  | db_management_parameters | Databases, users and grants for DB management | `map` | `{}` | no |
+  | db_management_timeout | Lambda timeout for DB management (seconds) | `number` | `300` | no |
+  | db_management_memory_size | Lambda memory size for DB management | `number` | `256` | no |
+  | db_management_logs_notifications_lambda_name | Name of the notifications Lambda | `string` | `"${local.common_name_prefix}-notifications"` | no |
+  | enable_db_dump_create | Enable scheduled SQL dump to S3 (MySQL/MariaDB) | `bool` | `false` | no |
+  | db_dump_create_db_name | Database name for dump create | `string` | `""` | no |
+  | db_dump_create_schedule_expression | Schedule expression for dump (cron/rate) | `string` | `""` | no |
+  | db_dump_create_s3_arn_permission_accounts | IAM ARNs allowed to read from dump S3 | `list` | `[]` | no |
+  | db_dump_create_retention_in_days | S3 object retention in days | `number` | `2` | no |
+  | db_dump_create_local_path_custom_scripts | Local path for custom SQL scripts | `string` | `""` | no |
+  | db_dump_create_timeout | Lambda timeout for dump create (seconds) | `number` | `300` | no |
+  | db_dump_create_memory_size | Lambda memory size for dump create | `number` | `256` | no |
+  | enable_db_dump_restore | Enable restore from S3 dump (MySQL/MariaDB) | `bool` | `false` | no |
+  | db_dump_restore_s3_bucket_name | S3 bucket name for restore | `string` | `""` | no |
+  | db_dump_restore_db_name | Database name for restore | `string` | `""` | no |
+  | db_dump_restore_timeout | Lambda timeout for restore (seconds) | `number` | `300` | no |
+  | db_dump_restore_memory_size | Lambda memory size for restore | `number` | `256` | no |
   | create_cloudwatch_log_group | Create a CloudWatch Log Group for the cluster | `bool` | `true` | no |
   | cloudwatch_log_group_retention_in_days | Log retention in days | `number` | `7` | no |
   | cloudwatch_log_group_kms_key_id | KMS key ID for encrypting logs | `string` | `null` | no |

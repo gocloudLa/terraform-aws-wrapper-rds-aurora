@@ -1,6 +1,6 @@
 module "lambda_restore_dump" {
   source  = "terraform-aws-modules/lambda/aws"
-  version = "8.0.1"
+  version = "8.7.0"
 
   count = local.condition_create ? 1 : 0
 
@@ -8,6 +8,9 @@ module "lambda_restore_dump" {
   description   = var.description
   handler       = "index.lambda_handler"
   runtime       = "python3.13"
+
+  ignore_source_code_hash      = true
+  trigger_on_package_timestamp = false
 
   memory_size = var.memory_size
   timeout     = var.timeout
