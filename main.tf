@@ -1,7 +1,7 @@
 module "rds_aurora" {
   for_each = var.rds_aurora_parameters
   source   = "terraform-aws-modules/rds-aurora/aws"
-  version = "10.2.0"
+  version  = "10.2.0"
 
 
   create = true
