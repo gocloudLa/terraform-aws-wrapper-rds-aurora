@@ -330,7 +330,7 @@ rds_aurora_parameters = {
   master_username = "master_user"
   master_password = "master_pass"
   secret = {
-    name = "${local.metadata.common_name}-db-main-secret"
+    name = "${local.common_name}-db-main-secret"
   }
   deletion_protection = true
 
