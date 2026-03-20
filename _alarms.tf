@@ -37,7 +37,8 @@ locals {
       }
     }
     "warning-EBSByteBalance" = {
-      # This alarm is used to detect a low percentage of throughput credits remaining in the burst bucket (Low byte balance percentage can cause throughput bottleneck issues).
+      # THIS ALARM IS NOT RECOMMENDED FOR AURORA POSTGRESQL INTANCES.
+      # Is used to detect a low percentage of throughput credits remaining in the burst bucket (Low byte b3alance percentage can cause throughput bottleneck issues).
       description         = "is less than 20% of EBSByte"
       threshold           = 20
       unit                = "Percent"
@@ -52,7 +53,8 @@ locals {
       }
     }
     "critical-EBSByteBalance" = {
-      # This alarm is used to detect a low percentage of throughput credits remaining in the burst bucket (Low byte balance percentage can cause throughput bottleneck issues).
+      # THIS ALARM IS NOT RECOMMENDED FOR AURORA POSTGRESQL INTANCES.
+      # Is used to detect a low percentage of throughput credits remaining in the burst bucket (Low byte balance percentage can cause throughput bottleneck issues).
       description         = "is less than 10% of EBSByte"
       threshold           = 10
       unit                = "Percent"
@@ -67,7 +69,8 @@ locals {
       }
     }
     "warning-EBSIOBalance" = {
-      # This alarm is used to detect a low percentage of I/O credits remaining in the burst bucket (Low IOPS balance percentage can cause IOPS bottleneck issues).
+      # THIS ALARM IS NOT RECOMMENDED FOR AURORA POSTGRESQL INTANCES.
+      # Is used to detect a low percentage of I/O credits remaining in the burst bucket (Low IOPS balance percentage can cause IOPS bottleneck issues).
       description         = "is less than 20% of EBSIO"
       threshold           = 20
       unit                = "Percent"
@@ -82,7 +85,8 @@ locals {
       }
     }
     "critical-EBSIOBalance" = {
-      # This alarm is used to detect a low percentage of I/O credits remaining in the burst bucket (Low IOPS balance percentage can cause IOPS bottleneck issues).
+      # THIS ALARM IS NOT RECOMMENDED FOR AURORA POSTGRESQL INTANCES.
+      # Is used to detect a low percentage of I/O credits remaining in the burst bucket (Low IOPS balance percentage can cause IOPS bottleneck issues).
       description         = "is less than 10% of EBSIO"
       threshold           = 10
       unit                = "Percent"
@@ -193,11 +197,11 @@ locals {
   )
 
   # RDS / Aurora instance-level alarms - creates a flat map for for_each
-  alarms_for_rds = merge(flatten([
+  alarms_for_cluster = merge(flatten([
     for cluster_name, cluster_config in var.rds_aurora_parameters : [
-      # Iterate through each cluster group (num_node_groups) and for each node group iterate through its replicas (replicas_per_node_group)
+      # Iterate through each RDS/Aurora cluster and for each cluster iterate through its member instances (cluster_members)
       # This creates alarms for each individual instance in the cluster
-      for instance_id in tolist(module.rds[cluster_name].cluster_members) : [
+      for instance_id in tolist(module.rds_aurora[cluster_name].cluster_members) : [
         for alarm_name, alarm in local.alarms : {
           "${cluster_name}-${instance_id}-${alarm_name}" = merge(
             alarm,
@@ -236,7 +240,7 @@ data "aws_sns_topic" "alarms_sns_topic_name" {
 /*----------------------------------------------------------------------*/
 
 resource "aws_cloudwatch_metric_alarm" "alarms" {
-  for_each = nonsensitive(local.alarms)
+  for_each = nonsensitive(local.alarms_for_cluster)
 
   alarm_name          = each.value.alarm_name
   alarm_description   = each.value.alarm_description
@@ -259,7 +263,7 @@ resource "aws_cloudwatch_metric_alarm" "alarms" {
 
   # conflicts with metric_name
   dynamic "metric_query" {
-    for_each = try(each.value.metric_query, var.rds_defaults.alarms_defaults.metric_query, [])
+    for_each = try(each.value.metric_query, var.rds_aurora_defaults.alarms_defaults.metric_query, [])
     content {
       id          = lookup(metric_query.value, "id")
       account_id  = lookup(metric_query.value, "account_id", null)
@@ -281,7 +285,7 @@ resource "aws_cloudwatch_metric_alarm" "alarms" {
       }
     }
   }
-  threshold_metric_id = try(each.value.threshold_metric_id, var.rds_defaults.alarms_defaults.threshold_metric_id, null)
+  threshold_metric_id = try(each.value.threshold_metric_id, var.rds_aurora_defaults.alarms_defaults.threshold_metric_id, null)
 
   tags = merge(try(each.value.tags, {}), local.common_tags, try(each.value.alarms_tags, {}))
 }
