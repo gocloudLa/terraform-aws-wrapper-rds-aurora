@@ -168,7 +168,7 @@ locals {
         value,
         {
           alarm_name          = "${split("/", value.namespace)[1]}-${alarm}-${local.common_name}-${rds_name}"
-          alarm_description   = "Rds[${rds_name}] ${value.description}"
+          alarm_description   = try(value.description, "")
           actions_enabled     = try(value.actions_enabled, true)
           threshold           = value.threshold
           unit                = value.unit
@@ -206,7 +206,7 @@ locals {
           "${cluster_name}-${instance_id}-${alarm_name}" = merge(
             alarm,
             {
-              alarm_name        = "${split("/", alarm.namespace)[1]}-${alarm.alarm_name}-${instance_id}"
+              alarm_name        = "${alarm.alarm_name}-${instance_id}"
               alarm_description = try(alarm.alarm_description, "RDS Instance [${instance_id}]")
               dimensions = {
                 DBInstanceIdentifier = instance_id

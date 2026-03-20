@@ -438,30 +438,30 @@ module "wrapper_rds_aurora" {
     }
 
     "postgres-cluster" = {
-      engine_version            = "17.4"
-      engine                    = "postgres"
-      cluster_instance_class    = "db.m5d.large"
-      port                      = 5432
+      engine_version         = "17.4"
+      engine                 = "postgres"
+      cluster_instance_class = "db.m5d.large"
+      port                   = 5432
 
-      subnets                   = data.aws_subnets.private.ids
+      subnets = data.aws_subnets.private.ids
 
       create_db_parameter_group                  = false
       create_db_cluster_parameter_group          = true
       parameter_group_family                     = "postgres17"
       db_cluster_parameter_group_name            = "postgres17-01"
       db_cluster_parameter_group_use_name_prefix = false
-      db_cluster_parameter_group_parameters      = [
+      db_cluster_parameter_group_parameters = [
         {
           apply_method = "immediate"
           name         = "log_min_duration_statement"
           value        = "59000"
         }
       ]
-      
+
       # Multi-AZ
       availability_zones = ["us-east-2a", "us-east-2b", "us-east-2c"]
       allocated_storage  = 500
-      iops               = 12000 
+      iops               = 12000
       storage_type       = "gp3"
 
       enable_local_write_forwarding = false
@@ -473,7 +473,7 @@ module "wrapper_rds_aurora" {
       master_username = "master_user"
       master_password = "master_pass"
       secret = {
-        name = "${local.metadata.common_name}-db-main-secret"
+        name = "${local.common_name}-db-main-secret"
       }
       deletion_protection = true
 
