@@ -138,12 +138,13 @@ locals {
       merge(
         value,
         {
-          alarm_name          = "${split("/", value.namespace)[1]}-${alarm}-${local.common_name}-${rds_name}"
+          alarm_name          = alarm
           alarm_description   = "Rds[${rds_name}] ${value.description}"
           actions_enabled     = try(values.alarms_overrides[alarm].actions_enabled, true)
           threshold           = try(values.alarms_overrides[alarm].threshold, value.threshold)
           unit                = try(values.alarms_overrides[alarm].unit, value.unit)
           metric_name         = try(values.alarms_overrides[alarm].metric_name, value.metric_name)
+          namespace           = try(values.alarms_overrides[alarm].namespace, value.namespace, "AWS/RDS")
           evaluation_periods  = try(values.alarms_overrides[alarm].evaluation_periods, value.evaluation_periods, null)
           datapoints_to_alarm = try(values.alarms_overrides[alarm].datapoints_to_alarm, value.datapoints_to_alarm, null)
           statistic           = try(values.alarms_overrides[alarm].statistic, value.statistic, null)
@@ -167,12 +168,13 @@ locals {
       "${rds_name}-${alarm}" => merge(
         value,
         {
-          alarm_name          = "${split("/", value.namespace)[1]}-${alarm}-${local.common_name}-${rds_name}"
+          alarm_name          = alarm
           alarm_description   = try(value.description, "")
           actions_enabled     = try(value.actions_enabled, true)
           threshold           = value.threshold
           unit                = value.unit
           metric_name         = value.metric_name
+          namespace           = try(value.namespace, "AWS/RDS")
           evaluation_periods  = try(value.evaluation_periods, null)
           datapoints_to_alarm = try(value.datapoints_to_alarm, null)
           statistic           = try(value.statistic, null)
@@ -206,7 +208,7 @@ locals {
           "${cluster_name}-${instance_id}-${alarm_name}" = merge(
             alarm,
             {
-              alarm_name        = "${alarm.alarm_name}-${instance_id}"
+              alarm_name        = "${split("/", alarm.namespace)[1]}-${alarm.alarm_name}-${instance_id}"
               alarm_description = try(alarm.alarm_description, "RDS Instance [${instance_id}]")
               dimensions = {
                 DBInstanceIdentifier = instance_id
