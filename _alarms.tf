@@ -197,7 +197,7 @@ locals {
     local.alarms_default_tmp,
     local.alarms_custom_tmp
   )
-  
+
   alarms_for_cluster = merge(flatten([
     for cluster_id, cluster_config in var.rds_aurora_parameters : [
       # We are using `allocated_storage` as a proxy to determine if this is RDS multi-az or not
