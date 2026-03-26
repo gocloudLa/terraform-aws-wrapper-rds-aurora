@@ -113,7 +113,7 @@ module "wrapper_rds_aurora" {
       }
 
       # Parameter group
-      db_cluster_parameter_group_parameters = [
+      cluster_parameter_group_parameters = [
         {
           name         = "connect_timeout"
           value        = 120
@@ -307,7 +307,7 @@ module "wrapper_rds_aurora" {
       # ]
 
       # Parameter group
-      db_cluster_parameter_group_parameters = [
+      cluster_parameter_group_parameters = [
         {
           name         = "log_min_duration_statement"
           value        = 4000
@@ -445,12 +445,13 @@ module "wrapper_rds_aurora" {
 
       subnets = data.aws_subnets.private.ids
 
+      # CLUSTER CONFIG
       create_db_parameter_group                  = false
-      create_db_cluster_parameter_group          = true
-      parameter_group_family                     = "postgres17"
-      db_cluster_parameter_group_name            = "postgres17-01"
-      db_cluster_parameter_group_use_name_prefix = false
-      db_cluster_parameter_group_parameters = [
+      create_cluster_parameter_group             = true
+      cluster_parameter_group_family             = "postgres17"
+      cluster_parameter_group_name               = "postgres17-01"
+      cluster_parameter_group_use_name_prefix    = false
+      cluster_parameter_group_parameters = [
         {
           apply_method = "immediate"
           name         = "log_min_duration_statement"
@@ -469,13 +470,11 @@ module "wrapper_rds_aurora" {
 
       dns_records = {}
 
-      database_name   = "postgres-cluster"
+      database_name   = "postgrescluster"
       master_username = "master_user"
       master_password = "master_pass"
-      secret = {
-        name = "${local.common_name}-db-main-secret"
-      }
-      deletion_protection = true
+
+      deletion_protection = false
 
       preferred_backup_window      = "04:31-05:01"
       preferred_maintenance_window = "mon:06:19-mon:06:49"
