@@ -197,25 +197,24 @@ locals {
     local.alarms_default_tmp,
     local.alarms_custom_tmp
   )
-
-  # RDS / Aurora instance-level alarms - creates a flat map for for_each
+  
   alarms_for_cluster = merge(flatten([
-    for cluster_name, cluster_config in var.rds_aurora_parameters : [
-      # Iterate through each RDS/Aurora cluster and for each cluster iterate through its member instances (cluster_members)
-      # This creates alarms for each individual instance in the cluster
-      for instance_id in tolist(module.rds_aurora[cluster_name].cluster_members) : [
-        for alarm_name, alarm in local.alarms : {
-          "${cluster_name}-${instance_id}-${alarm_name}" = merge(
-            alarm,
-            {
-              alarm_name        = "${split("/", alarm.namespace)[1]}-${alarm.alarm_name}-${instance_id}"
-              alarm_description = try(alarm.alarm_description, "RDS Instance [${instance_id}]")
-              dimensions = {
-                DBInstanceIdentifier = instance_id
-              }
+    for cluster_id, cluster_config in var.rds_aurora_parameters : [
+      # We are using `allocated_storage` as a proxy to determine if this is RDS multi-az or not
+      for instance_id in(try(cluster_config.allocated_storage, null) != null ?
+      [for i in range(1, 4) : "instance-${i}"] : [for instance_id, _ in cluster_config.instances : "${instance_id}"]) :
+      [for alarm_name, alarm in local.alarms : {
+        "${cluster_id}-${instance_id}-${alarm_name}" = merge(
+          alarm,
+          {
+            alarm_name        = "${split("/", alarm.namespace)[1]}-${alarm.alarm_name}-${module.rds_aurora[cluster_id].cluster_id}-${instance_id}"
+            alarm_description = try(alarm.alarm_description, "RDS Instance [${module.rds_aurora[cluster_id].cluster_id}-${instance_id}]")
+            dimensions = {
+              DBInstanceIdentifier = "${module.rds_aurora[cluster_id].cluster_id}-${instance_id}"
             }
-          )
-        } if startswith(alarm_name, "${cluster_name}-")
+          }
+        )
+        } if startswith(alarm_name, "${cluster_id}-")
       ]
     ] if can(var.rds_aurora_parameters) && var.rds_aurora_parameters != {} && try(cluster_config.enable_alarms, var.rds_aurora_defaults.enable_alarms, false)
   ])...)
