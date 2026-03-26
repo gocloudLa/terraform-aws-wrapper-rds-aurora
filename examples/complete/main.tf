@@ -446,11 +446,11 @@ module "wrapper_rds_aurora" {
       subnets = data.aws_subnets.private.ids
 
       # CLUSTER CONFIG
-      create_db_parameter_group                  = false
-      create_cluster_parameter_group             = true
-      cluster_parameter_group_family             = "postgres17"
-      cluster_parameter_group_name               = "postgres17-01"
-      cluster_parameter_group_use_name_prefix    = false
+      create_db_parameter_group               = false
+      create_cluster_parameter_group          = true
+      cluster_parameter_group_family          = "postgres17"
+      cluster_parameter_group_name            = "postgres17-01"
+      cluster_parameter_group_use_name_prefix = false
       cluster_parameter_group_parameters = [
         {
           apply_method = "immediate"
