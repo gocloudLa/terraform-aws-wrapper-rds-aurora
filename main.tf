@@ -102,13 +102,13 @@ module "rds_aurora" {
   /*---------------------------*/
   /* Cluster Parameter Group   */
   /*---------------------------*/
-  cluster_parameter_group      = try(each.value.cluster_parameter_group, var.rds_aurora_defaults.cluster_parameter_group, local.rds_cluster_parameter_group[each.key])
+  cluster_parameter_group      = try(each.value.create_cluster_parameter_group, true) ? try(each.value.cluster_parameter_group, var.rds_aurora_defaults.cluster_parameter_group, local.rds_cluster_parameter_group[each.key]) : null
   cluster_parameter_group_name = local.rds_cluster_parameter_group[each.key] != null ? null : try(each.value.cluster_parameter_group_name, var.rds_aurora_defaults.cluster_parameter_group_name, null)
 
   /*---------------------------*/
   /* Parameter Group           */
   /*---------------------------*/
-  db_parameter_group = try(each.value.db_parameter_group, var.rds_aurora_defaults.db_parameter_group, local.rds_db_parameter_group[each.key])
+  db_parameter_group = try(each.value.create_db_parameter_group, true) ? try(each.value.db_parameter_group, var.rds_aurora_defaults.db_parameter_group, local.rds_db_parameter_group[each.key]) : null
 
   /*---------------------------*/
   /* Security Group            */

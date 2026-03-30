@@ -45,7 +45,7 @@ quick_start: |
       }
   
       # Parameter group
-      db_cluster_parameter_group_parameters = [
+      cluster_parameter_group_parameters = [
         {
           name         = "connect_timeout"
           value        = 120
@@ -109,7 +109,7 @@ quick_start: |
       }
   
       # Parameter group
-      db_cluster_parameter_group_parameters = [
+      cluster_parameter_group_parameters = [
         {
           name         = "log_min_duration_statement"
           value        = 4000
@@ -257,6 +257,56 @@ features:
             }
           }
           ```
+      - title: PostgreSQL Cluster
+        code: |
+          ```hcl
+          "postgres-cluster" = {
+            engine_version         = "17.4"
+            engine                 = "postgres"
+            cluster_instance_class = "db.m5d.large"
+            port                   = 5432
+
+            subnets = data.aws_subnets.private.ids
+
+            # CLUSTER CONFIG
+            create_db_parameter_group                  = false
+            create_cluster_parameter_group             = true
+            cluster_parameter_group_family             = "postgres17"
+            cluster_parameter_group_name               = "postgres17-01"
+            cluster_parameter_group_use_name_prefix    = false
+            cluster_parameter_group_parameters = [
+              {
+                apply_method = "immediate"
+                name         = "log_min_duration_statement"
+                value        = "59000"
+              }
+            ]
+
+            # Multi-AZ
+            availability_zones = ["us-east-2a", "us-east-2b", "us-east-2c"]
+            allocated_storage  = 500
+            iops               = 12000
+            storage_type       = "gp3"
+
+            enable_local_write_forwarding = false
+            skip_final_snapshot           = true
+
+            dns_records = {}
+
+            database_name   = "postgrescluster"
+            master_username = "master_user"
+            master_password = "master_pass"
+
+            deletion_protection = false
+
+            preferred_backup_window      = "04:31-05:01"
+            preferred_maintenance_window = "mon:06:19-mon:06:49"
+            apply_immediately            = true
+            copy_tags_to_snapshot        = true
+
+            ingress_with_cidr_blocks = []
+          }
+          ```  
   - icon: 💾
     title: Dump with S3
     short_description: Generates SQL dumps and stores them in S3 with cleanup scripts for MySQL/MariaDB
@@ -319,6 +369,83 @@ features:
             }
           }
           ```
+  - icon: 🚨
+    title: Alarms Configuration
+    short_description: Enables and customizes CloudWatch alarms for the databases.
+    long_description: |
+      This configuration block allows enabling, customizing, or disabling CloudWatch alarms. By default, alarms are not created 
+
+      You can:
+        - Enable alarms globally for the resource (`enable_alarms = true`).
+        - Override default alarm parameters using `alarms_overrides`.
+        - Disable specific default alarms using `alarms_disabled`.
+        - Add completely custom alarms using `alarms_custom`.
+
+    examples:
+      - title: Enable default alarms
+        code: |
+          ```hcl
+          enable_alarms = true
+          ```
+
+      - title: Override default alarm parameters
+        code: |
+          ```hcl
+          alarms_overrides = {
+            "warning-CPUUtilization" = {
+              "actions_enabled"     = true
+              "evaluation_periods"  = 2
+              "datapoints_to_alarm" = 2
+              "threshold"           = 30
+              "period"              = 180
+              "treat_missing_data"  = "ignore"
+            }
+          }
+          ```
+
+      - title: Disable specific alarms
+        code: |
+          ```hcl
+          alarms_disabled = ["critical-CPUUtilization", "critical-EBSByteBalance", "critical-EBSIOBalance"]
+          ```
+
+      - title: Add custom alarms
+        code: |
+          ```hcl
+          alarms_custom = {
+            "warning-FreeableMemory" = {
+              description          = "FreeableMemory below 350 MB"
+              threshold            = 367001600
+              unit                 = "Bytes"
+              metric_name          = "FreeableMemory"
+              statistic            = "Average"
+              namespace            = "AWS/RDS"
+              period               = 60
+              evaluation_periods   = 15
+              datapoints_to_alarm  = 15
+              comparison_operator  = "LessThanThreshold"
+              alarms_tags = {
+                "alarm-level" = "WARN"
+              }
+            }
+
+            "critical-FreeableMemory" = {
+              description          = "FreeableMemory below 250 MB"
+              threshold            = 262144000
+              unit                 = "Bytes"
+              metric_name          = "FreeableMemory"
+              statistic            = "Average"
+              namespace            = "AWS/RDS"
+              period               = 60
+              evaluation_periods   = 15
+              datapoints_to_alarm  = 15
+              comparison_operator  = "LessThanThreshold"
+              alarms_tags = {
+                "alarm-level" = "CRIT"
+              }
+            }
+          }
+          ```
 important_notes: |
   - **🔒 Security Group:** The wrapper always manages the Security Group (see `security.tf`). The RDS module never creates one; we pass the wrapper's SG ID (and any extra `vpc_security_group_ids`) to the cluster.
   - **🚨 Restart Engine During Changes:** Restart the engine during parameter group changes - set `apply_immediately = true`
@@ -341,8 +468,7 @@ input_table: |
   | cluster_members | Cluster members | `list` | `null` | no |
   | copy_tags_to_snapshot | Copy tags to snapshot | `bool` | `null` | no |
   | database_name | Database name | `string` | `null` | no |
-  | db_cluster_instance_class | Cluster instance class | `string` | `null` | no |
-  | db_cluster_db_instance_parameter_group_name | Name of the cluster parameter group | `string` | `""` | no |
+  | cluster_instance_class | Cluster instance class | `string` | `null` | no |
   | delete_automated_backups | Delete automated backups | `bool` | `null` | no |
   | deletion_protection | Protection against deletion | `bool` | `true` | no |
   | enable_global_write_forwarding | Enable global direct write | `bool` | `null` | no |
@@ -394,16 +520,15 @@ input_table: |
   | master_user_password_rotate_immediately | Immediate rotation of master user password | `bool` | `null` | no |
   | master_user_password_rotation_duration | Duration of master user password rotation | `number` | `null` | no |
   | master_user_password_rotation_schedule_expression | Schedule expression for password rotation | `string` | `null` | no |
-  | create_db_cluster_parameter_group | Create parameter group for the cluster | `bool` | `true` | no |
-  | db_cluster_parameter_group_name | Cluster parameter group name | `string` | `"${local.common_name}-${each.key}-cpg"` | no |
-  | db_cluster_parameter_group_use_name_prefix | Cluster parameter group for use name prefix | `bool` | `true` | no |
-  | db_cluster_parameter_group_family | Parameter group family for the cluster | `string` | `null` | no |
-  | db_cluster_parameter_group_description | Cluster parameter group description | `string` | `"Cluster parameter group for ${local.common_name}-${each.key}"` | no |
-  | db_cluster_parameter_group_parameters | Cluster parameter group parameters | `list` | `[]` | no |
-  | create_db_parameter_group | Create database parameter group | `bool` | `true` | no |
-  | db_parameter_group_name | Database parameter group name | `string` | `"${local.common_name}-${each.key}-pg"` | no |
-  | db_parameter_group_family | Parameter group family for the database | `string` | `null` | no |
-  | db_parameter_group_description | Database parameter group description | `string` | `"Parameter group for ${local.common_name}-${each.key}"` | no |
+  | cluster_parameter_group_parameters | Cluster parameter group parameters | `list` | `[]` | no |
+  | cluster_parameter_group_name | Cluster parameter group name | `string` | `"${local.common_name}-${key}-cpg"` | no |
+  | cluster_parameter_group_use_name_prefix | Cluster parameter group for use name prefix | `bool` | `true` | no |
+  | cluster_parameter_group_description | Cluster parameter group description | `string` | `"Cluster parameter group for ${local.common_name}-${key}"` | no |
+  | cluster_parameter_group_family | Cluster parameter group family (e.g. aurora-mysql8.0) | `string` | Derived from engine + engine_version | no |  
+  | db_parameter_group_name | Database parameter group name | `string` | `"${local.common_name}-${key}-cpg"` | no |
+  | db_parameter_group_use_name_prefix | Database parameter group for use name prefix | `bool` | `true` | no |
+  | db_parameter_group_description | Database parameter group description | `string` | `"Database parameter group for ${local.common_name}-${key}"` | no |
+  | db_parameter_group_family | Database parameter group family (e.g. aurora-mysql8.0) | `string` | Derived from engine + engine_version | no |  
   | db_parameter_group_parameters | Database parameter group parameters | `list` | `[]` | no |
   | security_group_create | Create the Security Group (wrapper; RDS module never creates its own) | `bool` | `true` | no |
   | security_group_name | Security Group name | `string` | `"${local.common_name}-rds-${each.key}"` | no |

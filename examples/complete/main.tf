@@ -29,8 +29,91 @@ module "wrapper_rds_aurora" {
         }
       }
 
+      # ALARMS CONFIGURATION
+      enable_alarms = true # Default: false
+
+      alarms_disabled = ["critical-CPUUtilization", "critical-EBSByteBalance", "critical-EBSIOBalance"] # if you need to disable an alarm
+
+      alarms_overrides = {
+        # "warning-CPUUtilization" = {
+        #   "actions_enabled"     = true
+        #   "evaluation_periods"  = 2
+        #   "datapoints_to_alarm" = 2
+        #   "threshold"           = 30
+        #   "period"              = 180
+        #   "treat_missing_data"  = "ignore"
+        # }
+      }
+
+      alarms_custom = {
+        # "warning-FreeableMemory" = {
+        #   # This alarm helps to monitor low freeable memory which can mean that there is a spike in database connections or that your instance may be under high memory pressure.
+        #   description = "FreeableMemory below 350 MB"
+        #   threshold   = 367001600
+        #   unit        = "Bytes"
+        #   metric_name = "FreeableMemory"
+        #   statistic   = "Average"
+        #   namespace   = "AWS/RDS"
+        #   period      = 60
+        #   evaluation_periods = 15
+        #   datapoints_to_alarm = 15
+        #   comparison_operator = "LessThanThreshold"
+        #   alarms_tags = {
+        #     "alarm-level" = "WARN"
+        #   }
+        # }
+        # "critical-FreeableMemory" = {
+        #   description = "FreeableMemory below 250 MB"
+        #   # This alarm helps to monitor low freeable memory which can mean that there is a spike in database connections or that your instance may be under high memory pressure.
+        #   threshold   = 262144000
+        #   unit        = "Bytes"
+        #   metric_name = "FreeableMemory"
+        #   statistic   = "Average"
+        #   namespace   = "AWS/RDS"
+        #   period      = 60
+        #   evaluation_periods = 15
+        #   datapoints_to_alarm = 15
+        #   comparison_operator = "LessThanThreshold"
+        #   alarms_tags = {
+        #     "alarm-level" = "CRIT"
+        #   }
+        # }
+        # "warning-CPUCreditBalance" = {
+        #   description = "RDS CPUCreditBalance below 12 creditcs"
+        #   # This alarm helps to monitor the number of earned CPU credits that an instance has accrued since it was launched or started. 
+        #   threshold   = 12
+        #   unit        = "Count"
+        #   metric_name = "CPUCreditBalance"
+        #   statistic   = "Average"
+        #   namespace   = "AWS/RDS"
+        #   period      = 60
+        #   evaluation_periods = 3
+        #   datapoints_to_alarm = 3
+        #   comparison_operator = "LessThanThreshold"
+        #   alarms_tags = {
+        #     "alarm-level" = "WARN"
+        #   }
+        # }
+        # "critical-CPUCreditBalance" = {
+        #   description = "RDS CPUCreditBalance below 30 credits"
+        #   # This alarm helps to monitor the number of earned CPU credits that an instance has accrued since it was launched or started.
+        #   threshold   = 30
+        #   unit        = "Count"
+        #   metric_name = "CPUCreditBalance"
+        #   statistic   = "Average"
+        #   namespace   = "AWS/RDS"
+        #   period      = 60
+        #   evaluation_periods = 3
+        #   datapoints_to_alarm = 3
+        #   comparison_operator = "LessThanThreshold"
+        #   alarms_tags = {
+        #     "alarm-level" = "CRIT"
+        #   }
+        # }
+      }
+
       # Parameter group
-      db_cluster_parameter_group_parameters = [
+      cluster_parameter_group_parameters = [
         {
           name         = "connect_timeout"
           value        = 120
@@ -224,7 +307,7 @@ module "wrapper_rds_aurora" {
       # ]
 
       # Parameter group
-      db_cluster_parameter_group_parameters = [
+      cluster_parameter_group_parameters = [
         {
           name         = "log_min_duration_statement"
           value        = 4000
@@ -354,6 +437,52 @@ module "wrapper_rds_aurora" {
       }
     }
 
+    "postgres-cluster" = {
+      engine_version         = "17.4"
+      engine                 = "postgres"
+      cluster_instance_class = "db.m5d.large"
+      port                   = 5432
+
+      subnets = data.aws_subnets.private.ids
+
+      # CLUSTER CONFIG
+      create_db_parameter_group               = false
+      create_cluster_parameter_group          = true
+      cluster_parameter_group_family          = "postgres17"
+      cluster_parameter_group_name            = "postgres17-01"
+      cluster_parameter_group_use_name_prefix = false
+      cluster_parameter_group_parameters = [
+        {
+          apply_method = "immediate"
+          name         = "log_min_duration_statement"
+          value        = "59000"
+        }
+      ]
+
+      # Multi-AZ
+      availability_zones = ["us-east-2a", "us-east-2b", "us-east-2c"]
+      allocated_storage  = 500
+      iops               = 12000
+      storage_type       = "gp3"
+
+      enable_local_write_forwarding = false
+      skip_final_snapshot           = true
+
+      dns_records = {}
+
+      database_name   = "postgrescluster"
+      master_username = "master_user"
+      master_password = "master_pass"
+
+      deletion_protection = false
+
+      preferred_backup_window      = "04:31-05:01"
+      preferred_maintenance_window = "mon:06:19-mon:06:49"
+      apply_immediately            = true
+      copy_tags_to_snapshot        = true
+
+      ingress_with_cidr_blocks = []
+    }
   }
 
   rds_aurora_defaults = var.rds_aurora_defaults
