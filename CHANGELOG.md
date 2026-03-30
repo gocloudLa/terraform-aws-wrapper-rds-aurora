@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.2.2...v1.3.0) (2026-03-30)
+
+
+### Features
+
+* **module:** add alarms for rds cluster & rds aurora ([#13](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/issues/13)) ([af6e2ea](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/commit/af6e2ea594edceac6e6d121a237e571af16e37c7))
+
 ## [1.2.2](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.2.1...v1.2.2) (2026-03-07)
 
 
