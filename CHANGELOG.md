@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.3.0...v1.3.1) (2026-04-21)
+
+
+### Bug Fixes
+
+* **example:** change period and evaluations in CPUCreditBalance alarm ([#15](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/issues/15)) ([3db8674](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/commit/3db8674364294c518de9d528cff5ae6ef4c03515))
+
 ## [1.3.0](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.2.2...v1.3.0) (2026-03-30)
 
 
