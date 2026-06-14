@@ -209,6 +209,7 @@ module "wrapper_rds_aurora" {
       # DB Management
       enable_db_management                    = true
       enable_db_management_logs_notifications = true
+      # db_management_parameter_store_tier = "Standard" # Standard, Advanced, Intelligent-Tiering
       db_management_parameters = {
         databases = [
           {
@@ -332,6 +333,7 @@ module "wrapper_rds_aurora" {
 
       enable_db_management                    = true
       enable_db_management_logs_notifications = true
+      # db_management_parameter_store_tier = "Standard" # Standard, Advanced, Intelligent-Tiering
       db_management_parameters = {
         databases = [
           {
@@ -411,6 +413,7 @@ module "wrapper_rds_aurora" {
       # DB Management
       enable_db_management                    = true
       enable_db_management_logs_notifications = true
+      # db_management_parameter_store_tier = "Standard" # Standard, Advanced, Intelligent-Tiering
       db_management_parameters = {
         databases = [
           {

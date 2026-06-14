@@ -167,6 +167,7 @@ rds_aurora_parameters = {
 ### User and Database Management
 Deploy lambda function, which manages the creation and modification of *Users*, *Databases*, and their access to them.
 The credentials for the accesses will be stored in a parameter of **Parameter Store**.
+The Parameter Store tier can be configured with `db_management_parameter_store_tier` (`Standard`, `Advanced`, or `Intelligent-Tiering`; default: `Standard`).
 Send notifications of the actions taken.
 Does not remove databases or users; the latter will remain without permissions on the resources.
 
@@ -179,6 +180,7 @@ rds_aurora_parameters = {
     ...
     enable_db_management                    = true
     enable_db_management_logs_notifications = true
+    # db_management_parameter_store_tier      = "Standard" # Standard, Advanced, Intelligent-Tiering
     db_management_parameters = {
       databases = [
         {
@@ -241,6 +243,7 @@ rds_aurora_parameters = {
     ...
     enable_db_management                    = true
     enable_db_management_logs_notifications = true
+    # db_management_parameter_store_tier      = "Standard" # Standard, Advanced, Intelligent-Tiering
       db_management_parameters = {
         databases = [
           {
@@ -602,6 +605,7 @@ alarms_custom = {
 | db_management_timeout                             | Lambda timeout for DB management (seconds)                                                                                                                                                                     | `number` | `300`                                                        | no       |
 | db_management_memory_size                         | Lambda memory size for DB management                                                                                                                                                                           | `number` | `256`                                                        | no       |
 | db_management_logs_notifications_lambda_name      | Name of the notifications Lambda                                                                                                                                                                               | `string` | `"${local.common_name_prefix}-notifications"`                | no       |
+| db_management_parameter_store_tier                | SSM Parameter Store tier for db management credentials. Valid values: Standard, Advanced, Intelligent-Tiering                                                                                                  | `string` | `"Standard"`                                                 | no       |
 | enable_db_dump_create                             | Enable scheduled SQL dump to S3 (MySQL/MariaDB)                                                                                                                                                                | `bool`   | `false`                                                      | no       |
 | db_dump_create_db_name                            | Database name for dump create                                                                                                                                                                                  | `string` | `""`                                                         | no       |
 | db_dump_create_schedule_expression                | Schedule expression for dump (cron/rate)                                                                                                                                                                       | `string` | `""`                                                         | no       |

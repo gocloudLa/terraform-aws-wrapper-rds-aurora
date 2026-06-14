@@ -28,5 +28,7 @@ module "db_management" {
   enable_logs_notifications        = try(each.value.enable_db_management_logs_notifications, var.rds_aurora_defaults.enable_db_management_logs_notifications, false)
   logs_notifications_function_name = try(each.value.db_management_logs_notifications_lambda_name, var.rds_aurora_defaults.db_management_logs_notifications_lambda_name, "${local.common_name_prefix}-notifications")
 
+  tier = try(each.value.db_management_parameter_store_tier, var.rds_aurora_defaults.db_management_parameter_store_tier, "Standard")
+
   tags = local.common_tags
 }
