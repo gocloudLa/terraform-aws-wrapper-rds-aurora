@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.3.1...v1.4.0) (2026-06-14)
+
+
+### Features
+
+* **db-managment:** add parameter store tier variable ([#21](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/issues/21)) ([986af90](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/commit/986af90ebd44b517214db90b899cbb8b95394c6b))
+
 ## [1.3.1](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.3.0...v1.3.1) (2026-04-21)
 
 
