@@ -1,6 +1,6 @@
 module "lambda_db_management" {
   source  = "terraform-aws-modules/lambda/aws"
-  version = "8.7.0"
+  version = "8.8.0"
 
   count = local.condition_create ? 1 : 0
 
@@ -65,7 +65,7 @@ resource "aws_lambda_layer_version" "this" {
 
 module "ssm_parameter" {
   source  = "terraform-aws-modules/ssm-parameter/aws"
-  version = "1.2.0"
+  version = "2.1.0"
 
   count = local.condition_create ? 1 : 0
 
