@@ -124,7 +124,7 @@ module "s3_dump_objects" {
   version = "5.2.0"
   # version = "5.10.0"
 
-  for_each    = local.condition_create_s3_dump_objects ? fileset(var.local_path_custom_scripts, "**") : []
+  for_each    = local.condition_create_s3_dump_objects ? fileset(var.local_path_custom_scripts, "**") : toset([])
   bucket      = module.s3_create_dump[0].s3_bucket_id
   key         = "custom_scripts/${each.value}"
   file_source = "${var.local_path_custom_scripts}/${each.value}"
