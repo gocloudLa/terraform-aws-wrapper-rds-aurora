@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.4.0...v1.4.1) (2026-07-29)
+
+
+### Bug Fixes
+
+* **dump:** change type in for each s3_dump_objects module ([#31](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/issues/31)) ([2bc3f31](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/commit/2bc3f31438b5ca1ec7debd0c80a6e1d9dd4551d5))
+
 ## [1.4.0](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.3.1...v1.4.0) (2026-06-14)
 
 
