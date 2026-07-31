@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.4.1...v1.4.2) (2026-07-31)
+
+
+### Bug Fixes
+
+* **alarms:** change default description for defaults alarms ([#34](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/issues/34)) ([b5dffe2](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/commit/b5dffe235d151e0e21358b3f32b5e8573690bcaa))
+
 ## [1.4.1](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.4.0...v1.4.1) (2026-07-29)
 
 
