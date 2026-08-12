@@ -16,7 +16,7 @@ module "wrapper_rds_aurora" {
       engine_version = "8.0"
 
       # DATABASE INSIGHTS isnt supported for instances types: all db.t2, db.t3, db.t4g.micro and db.t4g.small
-      cluster_performance_insights_enabled = false
+      cluster_performance_insights_enabled          = false
       cluster_performance_insights_retention_period = null
 
       # Instances
@@ -400,7 +400,7 @@ module "wrapper_rds_aurora" {
       }
 
       # DATABASE INSIGHTS isnt supported for instances types: all db.t2, db.t3, db.t4g.micro and db.t4g.small
-      cluster_performance_insights_enabled = false
+      cluster_performance_insights_enabled          = false
       cluster_performance_insights_retention_period = null
 
 
