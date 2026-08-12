@@ -27,7 +27,7 @@ The Terraform Wrapper for RDS Aurora simplifies the configuration of the Relatio
 |------|------:|
 | <a href="https://github.com/terraform-aws-modules/terraform-aws-eventbridge" target="_blank">terraform-aws-modules/eventbridge/aws</a> | 4.3.0 |
 | <a href="https://github.com/terraform-aws-modules/terraform-aws-lambda" target="_blank">terraform-aws-modules/lambda/aws</a> | 8.7.0 |
-| <a href="https://github.com/terraform-aws-modules/terraform-aws-rds-aurora" target="_blank">terraform-aws-modules/rds-aurora/aws</a> | 10.2.0 |
+| <a href="https://github.com/terraform-aws-modules/terraform-aws-rds-aurora" target="_blank">terraform-aws-modules/rds-aurora/aws</a> | 10.3.1 |
 | <a href="https://github.com/terraform-aws-modules/terraform-aws-s3-bucket" target="_blank">terraform-aws-modules/s3-bucket/aws</a> | 5.10.0 |
 | <a href="https://github.com/terraform-aws-modules/terraform-aws-s3-bucket" target="_blank">terraform-aws-modules/s3-bucket/aws</a> | 5.2.0 |
 | <a href="https://github.com/terraform-aws-modules/terraform-aws-security-group" target="_blank">terraform-aws-modules/security-group/aws</a> | 5.3.1 |
@@ -651,6 +651,7 @@ alarms_custom = {
 | min_acu                                           | Minimum capacity of the DB shard group in Aurora Capacity Units (ACU)                                                                                                                                          | `number` | `null`                                                       | no       |
 | shard_group_tags                                  | Additional tags for the shard group                                                                                                                                                                            | `map`    | `{}`                                                         | no       |
 | shard_group_timeouts                              | Create, update, and delete timeout settings for the shard group                                                                                                                                                | `map`    | `{}`                                                         | no       |
+| auto_minor_version_upgrade                        | Whether to apply minor engine upgrades automatically to the DB cluster during the maintenance window                                                                                                           | `bool`   | `true`                                                       | no       |
 | tags                                              | A map of tags to assign to resources.                                                                                                                                                                          | `map`    | `{}`                                                         | no       |
 
 
