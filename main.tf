@@ -1,7 +1,7 @@
 module "rds_aurora" {
   for_each = var.rds_aurora_parameters
   source   = "terraform-aws-modules/rds-aurora/aws"
-  version  = "10.2.0"
+  version  = "10.3.1"
 
 
   create = true
@@ -21,6 +21,7 @@ module "rds_aurora" {
   is_primary_cluster                       = try(each.value.is_primary_cluster, var.rds_aurora_defaults.is_primary_cluster, true)
   allocated_storage                        = try(each.value.allocated_storage, var.rds_aurora_defaults.allocated_storage, null)
   allow_major_version_upgrade              = try(each.value.allow_major_version_upgrade, var.rds_aurora_defaults.allow_major_version_upgrade, false)
+  auto_minor_version_upgrade               = try(each.value.auto_minor_version_upgrade, var.rds_aurora_defaults.auto_minor_version_upgrade, true)
   apply_immediately                        = try(each.value.apply_immediately, var.rds_aurora_defaults.apply_immediately, false)
   autoscaling_enabled                      = try(each.value.autoscaling_enabled, var.rds_aurora_defaults.autoscaling_enabled, false)
   autoscaling_max_capacity                 = try(each.value.autoscaling_max_capacity, var.rds_aurora_defaults.autoscaling_max_capacity, 2)
@@ -75,7 +76,6 @@ module "rds_aurora" {
   engine_lifecycle_support                 = try(each.value.engine_lifecycle_support, var.rds_aurora_defaults.engine_lifecycle_support, null)
   cluster_monitoring_interval              = try(each.value.cluster_monitoring_interval, var.rds_aurora_defaults.cluster_monitoring_interval, 0)
   cluster_scalability_type                 = try(each.value.cluster_scalability_type, var.rds_aurora_defaults.cluster_scalability_type, null)
-  database_insights_mode                   = try(each.value.database_insights_mode, var.rds_aurora_defaults.database_insights_mode, null)
 
   /*---------------------------*/
   /* Instances                 */
@@ -148,9 +148,10 @@ module "rds_aurora" {
   /*---------------------------*/
   /* Cluster Performance       */
   /*---------------------------*/
-  cluster_performance_insights_enabled          = try(each.value.cluster_performance_insights_enabled, var.rds_aurora_defaults.cluster_performance_insights_enabled, null)
+  database_insights_mode                        = try(each.value.database_insights_mode, var.rds_aurora_defaults.database_insights_mode, "standard")
+  cluster_performance_insights_enabled          = try(each.value.cluster_performance_insights_enabled, var.rds_aurora_defaults.cluster_performance_insights_enabled, true)
   cluster_performance_insights_kms_key_id       = try(each.value.cluster_performance_insights_kms_key_id, var.rds_aurora_defaults.cluster_performance_insights_kms_key_id, null)
-  cluster_performance_insights_retention_period = try(each.value.cluster_performance_insights_retention_period, var.rds_aurora_defaults.cluster_performance_insights_retention_period, null)
+  cluster_performance_insights_retention_period = try(each.value.cluster_performance_insights_retention_period, var.rds_aurora_defaults.cluster_performance_insights_retention_period, 7)
 
   /*---------------------------*/
   /* Shard Group               */

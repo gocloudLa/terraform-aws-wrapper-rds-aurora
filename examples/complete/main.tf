@@ -15,6 +15,10 @@ module "wrapper_rds_aurora" {
       engine         = "aurora-mysql"
       engine_version = "8.0"
 
+      # DATABASE INSIGHTS isnt supported for instances types: all db.t2, db.t3, db.t4g.micro and db.t4g.small
+      cluster_performance_insights_enabled = false
+      cluster_performance_insights_retention_period = null
+
       # Instances
       instances = {
         1 = {
@@ -395,6 +399,11 @@ module "wrapper_rds_aurora" {
         }
       }
 
+      # DATABASE INSIGHTS isnt supported for instances types: all db.t2, db.t3, db.t4g.micro and db.t4g.small
+      cluster_performance_insights_enabled = false
+      cluster_performance_insights_retention_period = null
+
+
       dns_records = {
         "" = {
           zone_name    = local.zone_public # Create Public DNS Record
@@ -441,7 +450,7 @@ module "wrapper_rds_aurora" {
     }
 
     "postgres-cluster" = {
-      engine_version         = "17.4"
+      engine_version         = "17.10"
       engine                 = "postgres"
       cluster_instance_class = "db.m5d.large"
       port                   = 5432
