@@ -15,10 +15,6 @@ module "wrapper_rds_aurora" {
       engine         = "aurora-mysql"
       engine_version = "8.0"
 
-      # DATABASE INSIGHTS isnt supported for instances types: all db.t2, db.t3, db.t4g.micro and db.t4g.small
-      cluster_performance_insights_enabled          = false
-      cluster_performance_insights_retention_period = null
-
       # Instances
       instances = {
         1 = {
@@ -333,7 +329,10 @@ module "wrapper_rds_aurora" {
       ]
 
       # Monitoring & logs
-      enabled_cloudwatch_logs_exports = ["postgresql"] # Default = []
+      enabled_cloudwatch_logs_exports               = ["postgresql"] # Default = []
+      database_insights_mode                        = "standard" # Default = null
+      cluster_performance_insights_enabled          = true # Default = null
+      cluster_performance_insights_retention_period = 7 # Default = null
 
       enable_db_management                    = true
       enable_db_management_logs_notifications = true
@@ -398,11 +397,6 @@ module "wrapper_rds_aurora" {
           publicly_accessible = true
         }
       }
-
-      # DATABASE INSIGHTS isnt supported for instances types: all db.t2, db.t3, db.t4g.micro and db.t4g.small
-      cluster_performance_insights_enabled          = false
-      cluster_performance_insights_retention_period = null
-
 
       dns_records = {
         "" = {

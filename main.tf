@@ -148,10 +148,10 @@ module "rds_aurora" {
   /*---------------------------*/
   /* Cluster Performance       */
   /*---------------------------*/
-  database_insights_mode                        = try(each.value.database_insights_mode, var.rds_aurora_defaults.database_insights_mode, "standard")
-  cluster_performance_insights_enabled          = try(each.value.cluster_performance_insights_enabled, var.rds_aurora_defaults.cluster_performance_insights_enabled, true)
+  database_insights_mode                        = try(each.value.database_insights_mode, var.rds_aurora_defaults.database_insights_mode, null)
+  cluster_performance_insights_enabled          = try(each.value.cluster_performance_insights_enabled, var.rds_aurora_defaults.cluster_performance_insights_enabled, null)
   cluster_performance_insights_kms_key_id       = try(each.value.cluster_performance_insights_kms_key_id, var.rds_aurora_defaults.cluster_performance_insights_kms_key_id, null)
-  cluster_performance_insights_retention_period = try(each.value.cluster_performance_insights_retention_period, var.rds_aurora_defaults.cluster_performance_insights_retention_period, 7)
+  cluster_performance_insights_retention_period = try(each.value.cluster_performance_insights_retention_period, var.rds_aurora_defaults.cluster_performance_insights_retention_period, null)
 
   /*---------------------------*/
   /* Shard Group               */
