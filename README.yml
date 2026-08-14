@@ -449,6 +449,54 @@ features:
             }
           }
           ```
+  - icon: 📊
+    title: Database Insights (Performance Insights)
+    short_description: Enables Performance Insights metrics at the cluster level for monitoring and diagnostics.
+    long_description: |
+      Enables Database Insights at the cluster level, providing advanced monitoring and diagnostics for your database.
+      By default, the wrapper does **not** enable Performance Insights (`cluster_performance_insights_enabled` defaults to `null`/disabled). You must explicitly enable it for supported instance types.
+
+      **Modes (`database_insights_mode`):**
+        - `"standard"` — **Free tier**. Retains Performance Insights data for **7 days**. No additional cost.
+        - `"advanced"` — **Paid**. Extended retention (up to 2 years / 731 days), additional features and deeper diagnostics.
+
+      **Configuration parameters:**
+        - `database_insights_mode` — `"standard"` (free) or `"advanced"` (paid). Default: `null` (disabled).
+        - `cluster_performance_insights_enabled` — `true` to enable. Default: `null` (disabled).
+        - `cluster_performance_insights_retention_period` — Retention in days (`7` for standard free tier, up to `731` for advanced). Default: `null`.
+
+      **⚠️ Important:** Not all instance types support Performance Insights. Enabling it for unsupported instances will cause deployment errors (`InvalidParameterCombination`).
+
+      **Unsupported instance types (Aurora MySQL):**
+        - All `db.t2.*`
+        - All `db.t3.*` (micro, small, medium)
+        - `db.t4g.micro`
+        - `db.t4g.small`
+
+    examples:
+      - title: Enable Database Insights (standard - free)
+        code: |
+          ```hcl
+          rds_aurora_parameters = {
+            "pgsql-00" = {
+              ...
+              engine         = "aurora-postgresql"
+              engine_version = "16"
+
+              instances = {
+                1 = {
+                  instance_class = "db.r5.large"
+                }
+              }
+
+              # Database Insights - standard mode (free, 7 days retention)
+              database_insights_mode                        = "standard"
+              cluster_performance_insights_enabled          = true
+              cluster_performance_insights_retention_period = 7
+              ...
+            }
+          }
+          ```
 important_notes: |
   - **🔒 Security Group:** The wrapper always manages the Security Group (see `security.tf`). The RDS module never creates one; we pass the wrapper's SG ID (and any extra `vpc_security_group_ids`) to the cluster.
   - **🚨 Restart Engine During Changes:** Restart the engine during parameter group changes - set `apply_immediately = true`
@@ -594,4 +642,5 @@ input_table: |
   | min_acu | Minimum capacity of the DB shard group in Aurora Capacity Units (ACU) | `number` | `null` | no |
   | shard_group_tags | Additional tags for the shard group | `map` | `{}` | no |
   | shard_group_timeouts | Create, update, and delete timeout settings for the shard group | `map` | `{}` | no |
+  | auto_minor_version_upgrade | Whether to apply minor engine upgrades automatically to the DB cluster during the maintenance window | `bool` | `true` | no |
   | tags | A map of tags to assign to resources. | `map` | `{}` | no |

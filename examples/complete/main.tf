@@ -329,7 +329,10 @@ module "wrapper_rds_aurora" {
       ]
 
       # Monitoring & logs
-      enabled_cloudwatch_logs_exports = ["postgresql"] # Default = []
+      enabled_cloudwatch_logs_exports               = ["postgresql"] # Default = []
+      database_insights_mode                        = "standard"     # Default = null
+      cluster_performance_insights_enabled          = true           # Default = null
+      cluster_performance_insights_retention_period = 7              # Default = null
 
       enable_db_management                    = true
       enable_db_management_logs_notifications = true
@@ -441,7 +444,7 @@ module "wrapper_rds_aurora" {
     }
 
     "postgres-cluster" = {
-      engine_version         = "17.4"
+      engine_version         = "17.10"
       engine                 = "postgres"
       cluster_instance_class = "db.m5d.large"
       port                   = 5432

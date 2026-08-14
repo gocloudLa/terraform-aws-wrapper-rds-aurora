@@ -20,6 +20,8 @@ The Terraform Wrapper for RDS Aurora simplifies the configuration of the Relatio
 
 - 🚨 [Alarms Configuration](#alarms-configuration) - Enables and customizes CloudWatch alarms for the databases.
 
+- 📊 [Database Insights (Performance Insights)](#database-insights-(performance-insights)) - Enables Performance Insights metrics at the cluster level for monitoring and diagnostics.
+
 
 
 ### 🔗 External Modules
@@ -27,7 +29,7 @@ The Terraform Wrapper for RDS Aurora simplifies the configuration of the Relatio
 |------|------:|
 | <a href="https://github.com/terraform-aws-modules/terraform-aws-eventbridge" target="_blank">terraform-aws-modules/eventbridge/aws</a> | 4.3.0 |
 | <a href="https://github.com/terraform-aws-modules/terraform-aws-lambda" target="_blank">terraform-aws-modules/lambda/aws</a> | 8.7.0 |
-| <a href="https://github.com/terraform-aws-modules/terraform-aws-rds-aurora" target="_blank">terraform-aws-modules/rds-aurora/aws</a> | 10.2.0 |
+| <a href="https://github.com/terraform-aws-modules/terraform-aws-rds-aurora" target="_blank">terraform-aws-modules/rds-aurora/aws</a> | 10.3.1 |
 | <a href="https://github.com/terraform-aws-modules/terraform-aws-s3-bucket" target="_blank">terraform-aws-modules/s3-bucket/aws</a> | 5.10.0 |
 | <a href="https://github.com/terraform-aws-modules/terraform-aws-s3-bucket" target="_blank">terraform-aws-modules/s3-bucket/aws</a> | 5.2.0 |
 | <a href="https://github.com/terraform-aws-modules/terraform-aws-security-group" target="_blank">terraform-aws-modules/security-group/aws</a> | 5.3.1 |
@@ -508,6 +510,56 @@ alarms_custom = {
 </details>
 
 
+### Database Insights (Performance Insights)
+Enables Database Insights at the cluster level, providing advanced monitoring and diagnostics for your database.
+By default, the wrapper does **not** enable Performance Insights (`cluster_performance_insights_enabled` defaults to `null`/disabled). You must explicitly enable it for supported instance types.
+
+**Modes (`database_insights_mode`):**
+  - `"standard"` — **Free tier**. Retains Performance Insights data for **7 days**. No additional cost.
+  - `"advanced"` — **Paid**. Extended retention (up to 2 years / 731 days), additional features and deeper diagnostics.
+
+**Configuration parameters:**
+  - `database_insights_mode` — `"standard"` (free) or `"advanced"` (paid). Default: `null` (disabled).
+  - `cluster_performance_insights_enabled` — `true` to enable. Default: `null` (disabled).
+  - `cluster_performance_insights_retention_period` — Retention in days (`7` for standard free tier, up to `731` for advanced). Default: `null`.
+
+**⚠️ Important:** Not all instance types support Performance Insights. Enabling it for unsupported instances will cause deployment errors (`InvalidParameterCombination`).
+
+**Unsupported instance types (Aurora MySQL):**
+  - All `db.t2.*`
+  - All `db.t3.*` (micro, small, medium)
+  - `db.t4g.micro`
+  - `db.t4g.small`
+
+
+<details><summary>Enable Database Insights (standard - free)</summary>
+
+```hcl
+rds_aurora_parameters = {
+  "pgsql-00" = {
+    ...
+    engine         = "aurora-postgresql"
+    engine_version = "16"
+
+    instances = {
+      1 = {
+        instance_class = "db.r5.large"
+      }
+    }
+
+    # Database Insights - standard mode (free, 7 days retention)
+    database_insights_mode                        = "standard"
+    cluster_performance_insights_enabled          = true
+    cluster_performance_insights_retention_period = 7
+    ...
+  }
+}
+```
+
+
+</details>
+
+
 
 
 ## 📑 Inputs
@@ -651,6 +703,7 @@ alarms_custom = {
 | min_acu                                           | Minimum capacity of the DB shard group in Aurora Capacity Units (ACU)                                                                                                                                          | `number` | `null`                                                       | no       |
 | shard_group_tags                                  | Additional tags for the shard group                                                                                                                                                                            | `map`    | `{}`                                                         | no       |
 | shard_group_timeouts                              | Create, update, and delete timeout settings for the shard group                                                                                                                                                | `map`    | `{}`                                                         | no       |
+| auto_minor_version_upgrade                        | Whether to apply minor engine upgrades automatically to the DB cluster during the maintenance window                                                                                                           | `bool`   | `true`                                                       | no       |
 | tags                                              | A map of tags to assign to resources.                                                                                                                                                                          | `map`    | `{}`                                                         | no       |
 
 
