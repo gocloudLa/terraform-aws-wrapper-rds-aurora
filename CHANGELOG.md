@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.4.2...v1.5.0) (2026-08-14)
+
+
+### Features
+
+* **module:** add custom security group name ([#39](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/issues/39)) ([cf40d05](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/commit/cf40d0500116f3ad9ea46f64e650939b776a1f5a))
+* **module:** update version and add database insights in readme ([#40](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/issues/40)) ([13e63d3](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/commit/13e63d30b7e842dc2dd79e7680867d42477ddf4e))
+
 ## [1.4.2](https://github.com/gocloudLa/terraform-aws-wrapper-rds-aurora/compare/v1.4.1...v1.4.2) (2026-07-31)
 
 
